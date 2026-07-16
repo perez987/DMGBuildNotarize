@@ -30,7 +30,7 @@ It:
 - checks that your `.app` bundle looks valid
 - checks that the app is signed with a Developer ID Application certificate
 - creates a standard DMG with your app and an Applications shortcut
-- applies a basic Finder layout
+- styles the DMG Finder window with a built-in background, larger icons, and a drag-to-Applications layout
 - compresses the DMG
 - signs the DMG
 - submits the DMG to Apple for notarization
@@ -38,6 +38,14 @@ It:
 - verifies the finished DMG
 
 The goal is not to hide what is happening. The app shows each step and prints the command output, so you can still see what succeeded or failed.
+
+When DMGBuildNotarize styles the Finder window, it automatically:
+
+- opens the mounted DMG in Finder
+- applies a custom background image with drag instructions
+- sizes the window for a polished installer-style presentation
+- positions the app and `Applications` shortcut for a left-to-right drag flow
+- saves the icon view layout before the image is detached and compressed
 
 ## Who It Is For
 

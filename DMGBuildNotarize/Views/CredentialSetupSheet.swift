@@ -22,7 +22,15 @@ struct CredentialSetupSheet: View {
         self.settings = settings
         self.onCompleted = onCompleted
         _profileName = State(initialValue: initialProfileName)
-        _teamID = State(initialValue: settings.selectedSigningIdentity?.teamID ?? "")
+        _mode = State(initialValue: CredentialSetupMode(rawValue: settings.savedNotaryCredentialMode) ?? .appleID)
+        _appleID = State(initialValue: settings.savedNotaryAppleID)
+        _teamID = State(initialValue: settings.savedNotaryTeamID.isEmpty
+            ? (settings.selectedSigningIdentity?.teamID ?? "")
+            : settings.savedNotaryTeamID)
+        _appSpecificPassword = State(initialValue: settings.savedNotaryAppSpecificPassword)
+        _privateKeyPath = State(initialValue: settings.savedNotaryPrivateKeyPath)
+        _keyID = State(initialValue: settings.savedNotaryKeyID)
+        _issuerID = State(initialValue: settings.savedNotaryIssuerID)
     }
 
     var body: some View {
@@ -91,7 +99,7 @@ struct CredentialSetupSheet: View {
             }
         }
         .padding()
-        .frame(width: 560)
+        .frame(width: 560, height: 572)
     }
 
     private var apiKeyFields: some View {
@@ -264,6 +272,7 @@ struct CredentialSetupSheet: View {
                 authentication: authentication
             )
             let result = try await CredentialSetupService().storeCredentials(request)
+            saveCredentialFields()
             settings.notaryProfile = result.profileName
             onCompleted(result.profileName)
             dismiss()
@@ -272,6 +281,18 @@ struct CredentialSetupSheet: View {
         }
 
         isRunning = false
+    }
+
+    private func saveCredentialFields() {
+        settings.savedNotaryCredentialMode = mode.rawValue
+        settings.savedNotaryAppleID = appleID
+        settings.savedNotaryTeamID = teamID
+        // appSpecificPasswordBinding already strips newlines as the user types;
+        // removingNewlines here is a defensive guard before writing to Keychain.
+        settings.savedNotaryAppSpecificPassword = appSpecificPassword.removingNewlines
+        settings.savedNotaryKeyID = keyID
+        settings.savedNotaryIssuerID = issuerID
+        settings.savedNotaryPrivateKeyPath = privateKeyPath
     }
 
     private var authentication: NotaryCredentialAuthentication {
@@ -300,8 +321,8 @@ private enum CredentialSetupMode: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .apiKey: return "Team API Key"
-        case .appleID: return "Apple ID"
+        case .apiKey: return String(localized: "Team API Key")
+        case .appleID: return String(localized: "Apple ID")
         }
     }
 }

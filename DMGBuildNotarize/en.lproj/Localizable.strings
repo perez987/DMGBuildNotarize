@@ -1,0 +1,101 @@
+/* ContentView — toolbar */
+"Choose App" = "Choose App";
+"Build DMG" = "Build DMG";
+
+/* ContentView — replace-DMG alert */
+"Replace existing DMG?" = "Replace existing DMG?";
+"Replace" = "Replace";
+"Cancel" = "Cancel";
+
+/* HeaderView — status bar */
+"Packaging and notarizing" = "Packaging and notarizing";
+"Ready: %@" = "Ready: %@";
+"Choose a Developer ID Application identity in Settings" = "Choose a Developer ID Application identity in Settings";
+"App signature verified" = "App signature verified";
+"Drop a signed .app to begin" = "Drop a signed .app to begin";
+
+/* DropTargetView */
+"Inspecting App" = "Inspecting App";
+"Drop Signed App" = "Drop Signed App";
+".app bundle" = ".app bundle";
+
+/* AppSummaryView */
+"App" = "App";
+"No App Selected" = "No App Selected";
+"Name" = "Name";
+"Bundle ID" = "Bundle ID";
+"Version" = "Version";
+"Executable" = "Executable";
+"Signature" = "Signature";
+"Checking" = "Checking";
+"Developer ID ready" = "Developer ID ready";
+
+/* OutputSettingsView */
+"DMG" = "DMG";
+"Volume" = "Volume";
+"Output" = "Output";
+"Volume name" = "Volume name";
+"Choose output" = "Choose output";
+"Choose Output" = "Choose Output";
+
+/* ProgressLogView */
+"Log" = "Log";
+"Create %@ Profile" = "Create %@ Profile";
+"Command output will appear here." = "Command output will appear here.";
+
+/* SettingsView */
+"Signing" = "Signing";
+"Identity" = "Identity";
+"No Developer ID Application identities" = "No Developer ID Application identities";
+"Refresh" = "Refresh";
+"Notarization" = "Notarization";
+"Keychain Profile" = "Keychain Profile";
+"Create or Validate Profile" = "Create or Validate Profile";
+"Choose Default Output Folder" = "Choose Default Output Folder";
+
+/* CredentialSetupSheet — header */
+"Notary Profile" = "Notary Profile";
+"Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain." = "Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain.";
+"Xcode-managed signing certificates do not include a reusable notarization login for third-party apps." = "Xcode-managed signing certificates do not include a reusable notarization login for third-party apps.";
+
+/* CredentialSetupSheet — form */
+"Profile" = "Profile";
+"Profile Name" = "Profile Name";
+"Credentials" = "Credentials";
+"Method" = "Method";
+
+/* CredentialSetupSheet — API key fields */
+"Team API Key" = "Team API Key";
+"Private Key" = "Private Key";
+"Choose .p8 key" = "Choose .p8 key";
+"Key ID" = "Key ID";
+"Issuer ID" = "Issuer ID";
+"Issuer ID from Team Keys" = "Issuer ID from Team Keys";
+"Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization." = "Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization.";
+"If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password." = "If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password.";
+"Open App Store Connect API Keys" = "Open App Store Connect API Keys";
+"Choose API Private Key" = "Choose API Private Key";
+
+/* CredentialSetupSheet — Apple ID fields */
+"Apple ID" = "Apple ID";
+"Team ID" = "Team ID";
+"Password" = "Password";
+"App-specific password" = "App-specific password";
+"Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled.";
+"Open Apple Account Passwords" = "Open Apple Account Passwords";
+"Use %@" = "Use %@";
+
+/* CredentialSetupSheet — actions */
+"Store & Validate" = "Store & Validate";
+
+/* PackagingStage titles */
+"Validate app" = "Validate app";
+"Validate notary profile" = "Validate notary profile";
+"Stage installer" = "Stage installer";
+"Create writable DMG" = "Create writable DMG";
+"Apply Finder layout" = "Apply Finder layout";
+"Compress DMG" = "Compress DMG";
+"Sign DMG" = "Sign DMG";
+"Notarize" = "Notarize";
+"Staple ticket" = "Staple ticket";
+"Verify" = "Verify";

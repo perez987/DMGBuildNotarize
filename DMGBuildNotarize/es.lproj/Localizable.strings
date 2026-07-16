@@ -1,0 +1,101 @@
+/* ContentView — toolbar */
+"Choose App" = "Elegir App";
+"Build DMG" = "Crear DMG";
+
+/* ContentView — replace-DMG alert */
+"Replace existing DMG?" = "¿Reemplazar DMG existente?";
+"Replace" = "Reemplazar";
+"Cancel" = "Cancelar";
+
+/* HeaderView — status bar */
+"Packaging and notarizing" = "Empaquetando y notarizando";
+"Ready: %@" = "Listo: %@";
+"Choose a Developer ID Application identity in Settings" = "Elige una identidad Developer ID Application en Ajustes";
+"App signature verified" = "Firma de la app verificada";
+"Drop a signed .app to begin" = "Arrastra una .app firmada para comenzar";
+
+/* DropTargetView */
+"Inspecting App" = "Inspeccionando App";
+"Drop Signed App" = "Arrastra App Firmada";
+".app bundle" = "Paquete .app";
+
+/* AppSummaryView */
+"App" = "App";
+"No App Selected" = "Ninguna App Seleccionada";
+"Name" = "Nombre";
+"Bundle ID" = "Bundle ID";
+"Version" = "Versión";
+"Executable" = "Ejecutable";
+"Signature" = "Firma";
+"Checking" = "Verificando";
+"Developer ID ready" = "Developer ID correcto";
+
+/* OutputSettingsView */
+"DMG" = "DMG";
+"Volume" = "Volumen";
+"Output" = "Destino";
+"Volume name" = "Nombre del volumen";
+"Choose output" = "Elegir destino";
+"Choose Output" = "Elegir Destino";
+
+/* ProgressLogView */
+"Log" = "Registro";
+"Create %@ Profile" = "Crear perfil %@";
+"Command output will appear here." = "La salida del comando aparecerá aquí.";
+
+/* SettingsView */
+"Signing" = "Firma";
+"Identity" = "Identidad";
+"No Developer ID Application identities" = "No hay identidades Developer ID Application";
+"Refresh" = "Actualizar";
+"Notarization" = "Notarización";
+"Keychain Profile" = "Perfil del Llavero";
+"Create or Validate Profile" = "Crear o Validar Perfil";
+"Choose Default Output Folder" = "Elegir Carpeta Destino Predeterminada";
+
+/* CredentialSetupSheet — header */
+"Notary Profile" = "Perfil de Notarización";
+"Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain." = "La notarización usa credenciales de App Store Connect. DMGBuildNotarize pide a la herramienta de Apple que las valide y guarda un perfil con nombre en el Llavero.";
+"Xcode-managed signing certificates do not include a reusable notarization login for third-party apps." = "Los certificados de firma gestionados por Xcode no incluyen un inicio de sesión de notarización reutilizable para apps de terceros.";
+
+/* CredentialSetupSheet — form */
+"Profile" = "Perfil";
+"Profile Name" = "Nombre del perfil";
+"Credentials" = "Credenciales";
+"Method" = "Método";
+
+/* CredentialSetupSheet — API key fields */
+"Team API Key" = "Clave API del equipo";
+"Private Key" = "Clave Privada";
+"Choose .p8 key" = "Elegir clave .p8";
+"Key ID" = "ID de Clave";
+"Issuer ID" = "ID de Emisor";
+"Issuer ID from Team Keys" = "ID de Emisor de Claves del Equipo";
+"Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization." = "Encuéntralo en App Store Connect en Users and Access > Integrations > App Store Connect API > Team Keys. Es el Issuer ID for the team, no lel Key ID, y las claves API individuales no funcionan con la notarización.";
+"If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password." = "Si tu equipo no puede crear otra Clave API del equipo, usa el método de Apple ID con una contraseña específica de la app.";
+"Open App Store Connect API Keys" = "Abrir Claves API de App Store Connect";
+"Choose API Private Key" = "Elegir Clave API Privada";
+
+/* CredentialSetupSheet — Apple ID fields */
+"Apple ID" = "Apple ID";
+"Team ID" = "ID de Equipo";
+"Password" = "Contraseña";
+"App-specific password" = "Contraseña específica de la app";
+"Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Genérala en account.apple.com en Sign-In and Security > App-Specific Passwords. Tu cuenta de Apple debe tener la autenticación de dos factores activada.";
+"Open Apple Account Passwords" = "Abrir Contraseñas de la Cuenta Apple";
+"Use %@" = "Usar %@";
+
+/* CredentialSetupSheet — actions */
+"Store & Validate" = "Guardar y Validar";
+
+/* PackagingStage titles */
+"Validate app" = "Validar app";
+"Validate notary profile" = "Validar perfil de notarización";
+"Stage installer" = "Preparar instalador";
+"Create writable DMG" = "Crear DMG editable";
+"Apply Finder layout" = "Aplicar diseño al Finder";
+"Compress DMG" = "Comprimir DMG";
+"Sign DMG" = "Firmar DMG";
+"Notarize" = "Notarizar";
+"Staple ticket" = "Adjuntar ticket";
+"Verify" = "Verificar";

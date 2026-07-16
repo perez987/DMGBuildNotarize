@@ -143,17 +143,17 @@ private struct HeaderView: View {
 
     private var statusText: String {
         if controller.isRunning {
-            return "Packaging and notarizing"
+            return String(localized: "Packaging and notarizing")
         }
         if let result = controller.completedResult {
-            return "Ready: \(result.outputURL.lastPathComponent)"
+            return String(format: String(localized: "Ready: %@"), result.outputURL.lastPathComponent)
         }
         if settings.selectedSigningIdentity == nil {
-            return "Choose a Developer ID Application identity in Settings"
+            return String(localized: "Choose a Developer ID Application identity in Settings")
         }
         if controller.selectedAppInfo != nil, controller.validationReport != nil {
-            return "App signature verified"
+            return String(localized: "App signature verified")
         }
-        return "Drop a signed .app to begin"
+        return String(localized: "Drop a signed .app to begin")
     }
 }

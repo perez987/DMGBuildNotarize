@@ -12,7 +12,7 @@ struct AppSummaryView: View {
                     SummaryRow("Bundle ID", info.bundleIdentifier)
                     SummaryRow("Version", "\(info.shortVersion) (\(info.buildVersion))")
                     SummaryRow("Executable", info.executableName)
-                    SummaryRow("Signature", report == nil ? "Checking" : "Developer ID ready")
+                    SummaryRow("Signature", report == nil ? String(localized: "Checking") : String(localized: "Developer ID ready"))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else {
@@ -24,10 +24,10 @@ struct AppSummaryView: View {
 }
 
 private struct SummaryRow: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
 
-    init(_ title: String, _ value: String) {
+    init(_ title: LocalizedStringKey, _ value: String) {
         self.title = title
         self.value = value
     }

@@ -18,7 +18,7 @@ struct OutputSettingsView: View {
                     Text("Output")
                         .foregroundStyle(.secondary)
                     HStack {
-                        Text(controller.outputURL?.path ?? "Choose output")
+                        Text(controller.outputURL?.path ?? String(localized: "Choose output"))
                             .lineLimit(1)
                             .truncationMode(.middle)
                             .textSelection(.enabled)

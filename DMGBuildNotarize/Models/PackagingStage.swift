@@ -16,16 +16,16 @@ enum PackagingStage: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .validateApp: return "Validate app"
-        case .validateNotaryProfile: return "Validate notary profile"
-        case .stageVolume: return "Stage installer"
-        case .createReadWriteImage: return "Create writable DMG"
-        case .applyFinderLayout: return "Apply Finder layout"
-        case .convertCompressedImage: return "Compress DMG"
-        case .signDMG: return "Sign DMG"
-        case .notarize: return "Notarize"
-        case .staple: return "Staple ticket"
-        case .verify: return "Verify"
+        case .validateApp: return String(localized: "Validate app")
+        case .validateNotaryProfile: return String(localized: "Validate notary profile")
+        case .stageVolume: return String(localized: "Stage installer")
+        case .createReadWriteImage: return String(localized: "Create writable DMG")
+        case .applyFinderLayout: return String(localized: "Apply Finder layout")
+        case .convertCompressedImage: return String(localized: "Compress DMG")
+        case .signDMG: return String(localized: "Sign DMG")
+        case .notarize: return String(localized: "Notarize")
+        case .staple: return String(localized: "Staple ticket")
+        case .verify: return String(localized: "Verify")
         }
     }
 }

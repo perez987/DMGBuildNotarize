@@ -15,6 +15,37 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(defaultOutputFolderPath, forKey: Keys.defaultOutputFolderPath) }
     }
 
+    // Saved notary credential fields (restored when the credential setup sheet opens)
+    @Published var savedNotaryCredentialMode: String {
+        didSet { defaults.set(savedNotaryCredentialMode, forKey: Keys.savedNotaryCredentialMode) }
+    }
+
+    @Published var savedNotaryAppleID: String {
+        didSet { defaults.set(savedNotaryAppleID, forKey: Keys.savedNotaryAppleID) }
+    }
+
+    @Published var savedNotaryTeamID: String {
+        didSet { defaults.set(savedNotaryTeamID, forKey: Keys.savedNotaryTeamID) }
+    }
+
+    @Published var savedNotaryKeyID: String {
+        didSet { defaults.set(savedNotaryKeyID, forKey: Keys.savedNotaryKeyID) }
+    }
+
+    @Published var savedNotaryIssuerID: String {
+        didSet { defaults.set(savedNotaryIssuerID, forKey: Keys.savedNotaryIssuerID) }
+    }
+
+    @Published var savedNotaryPrivateKeyPath: String {
+        didSet { defaults.set(savedNotaryPrivateKeyPath, forKey: Keys.savedNotaryPrivateKeyPath) }
+    }
+
+    /// App-specific password stored securely in the Keychain.
+    var savedNotaryAppSpecificPassword: String {
+        get { KeychainHelper.load(forKey: Keys.savedNotaryAppSpecificPassword) ?? "" }
+        set { KeychainHelper.save(newValue, forKey: Keys.savedNotaryAppSpecificPassword) }
+    }
+
     @Published var signingIdentities: [SigningIdentity] = []
     @Published var identityLoadError: String?
     @Published var isLoadingIdentities = false
@@ -30,6 +61,12 @@ final class AppSettings: ObservableObject {
         self.defaultOutputFolderPath = defaults.string(forKey: Keys.defaultOutputFolderPath)
             ?? FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.path
             ?? FileManager.default.homeDirectoryForCurrentUser.path
+        self.savedNotaryCredentialMode = defaults.string(forKey: Keys.savedNotaryCredentialMode) ?? ""
+        self.savedNotaryAppleID = defaults.string(forKey: Keys.savedNotaryAppleID) ?? ""
+        self.savedNotaryTeamID = defaults.string(forKey: Keys.savedNotaryTeamID) ?? ""
+        self.savedNotaryKeyID = defaults.string(forKey: Keys.savedNotaryKeyID) ?? ""
+        self.savedNotaryIssuerID = defaults.string(forKey: Keys.savedNotaryIssuerID) ?? ""
+        self.savedNotaryPrivateKeyPath = defaults.string(forKey: Keys.savedNotaryPrivateKeyPath) ?? ""
     }
 
     var selectedSigningIdentity: SigningIdentity? {
@@ -57,5 +94,12 @@ final class AppSettings: ObservableObject {
         static let signingIdentityHash = "signingIdentityHash"
         static let notaryProfile = "notaryProfile"
         static let defaultOutputFolderPath = "defaultOutputFolderPath"
+        static let savedNotaryCredentialMode = "savedNotaryCredentialMode"
+        static let savedNotaryAppleID = "savedNotaryAppleID"
+        static let savedNotaryTeamID = "savedNotaryTeamID"
+        static let savedNotaryKeyID = "savedNotaryKeyID"
+        static let savedNotaryIssuerID = "savedNotaryIssuerID"
+        static let savedNotaryPrivateKeyPath = "savedNotaryPrivateKeyPath"
+        static let savedNotaryAppSpecificPassword = "notaryAppSpecificPassword"
     }
 }

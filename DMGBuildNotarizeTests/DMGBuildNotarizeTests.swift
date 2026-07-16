@@ -2,6 +2,25 @@ import XCTest
 @testable import DMGBuildNotarize
 
 final class DMGBuildNotarizeTests: XCTestCase {
+    func testAppDeclaresAppleEventsUsageDescription() {
+        XCTAssertEqual(
+            Bundle.main.object(forInfoDictionaryKey: "NSAppleEventsUsageDescription") as? String,
+            "DMGBuildNotarize uses Finder automation to create custom installer window layouts."
+        )
+    }
+
+    func testAppleScriptRunnerPropagatesExecutionErrors() async {
+        do {
+            try await DefaultAppleScriptRunner().execute(#"error "Deliberate test failure" number -2700"#)
+            XCTFail("Expected the AppleScript execution error to be thrown")
+        } catch {
+            let error = error as NSError
+            XCTAssertEqual(error.domain, "NSAppleScript")
+            XCTAssertEqual(error.code, -2700)
+            XCTAssertEqual(error.localizedDescription, "Deliberate test failure")
+        }
+    }
+
     func testAppBundleInfoLoadsRequiredMetadata() throws {
         let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
 
@@ -284,6 +303,11 @@ final class DMGBuildNotarizeTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: context.stagedDirectory.appendingPathComponent("Fixture.app").path))
         let applicationsLink = context.stagedDirectory.appendingPathComponent("Applications")
         XCTAssertEqual(try FileManager.default.destinationOfSymbolicLink(atPath: applicationsLink.path), "/Applications")
+        let backgroundImage = context.stagedDirectory
+            .appendingPathComponent(".background", isDirectory: true)
+            .appendingPathComponent("background.png")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: backgroundImage.path))
+        XCTAssertEqual(Array(try Data(contentsOf: backgroundImage).prefix(8)), [137, 80, 78, 71, 13, 10, 26, 10])
         try? builder.clean(context: context)
     }
 
@@ -300,21 +324,38 @@ final class DMGBuildNotarizeTests: XCTestCase {
             replaceExistingOutput: false
         )
         let runner = MockProcessRunner()
-        let builder = DmgBuilder(runner: runner)
+        let scriptRunner = MockAppleScriptRunner()
+        let builder = DmgBuilder(runner: runner, scriptRunner: scriptRunner)
         let context = try builder.createContext(for: job)
+
+        // Simulate Finder writing .DS_Store to the mounted volume when any
+        // AppleScript executes. The real Finder writes it when the layout
+        // window is closed; writing it on every mock call is a stable
+        // substitute that avoids matching against script content.
+        let dsStoreURL = context.mountedVolumeURL.appendingPathComponent(".DS_Store")
+        scriptRunner.sideEffect = { _ in
+            try Data("stub".utf8).write(to: dsStoreURL)
+        }
 
         try await builder.applyFinderLayout(job: job, context: context)
 
-        XCTAssertEqual(runner.commands.map(\.executableURL.path), [
-            "/usr/bin/hdiutil",
-            "/usr/bin/osascript",
-            "/usr/bin/osascript",
-            "/usr/bin/SetFile",
-            "/bin/sync",
-            "/usr/bin/hdiutil"
-        ])
-        XCTAssertEqual(runner.commands[4].arguments, [])
-        XCTAssertEqual(runner.commands[5].arguments.first, "detach")
+        // Both the probe and the layout script must be sent via NSAppleScript
+        // so that Apple Events originate from this process (which holds the
+        // user-granted Automation permission) rather than from osascript.
+        XCTAssertEqual(scriptRunner.sources.count, 2)
+        XCTAssertTrue(scriptRunner.sources[0].contains("name"))              // probe
+        XCTAssertTrue(scriptRunner.sources[1].contains("background picture")) // layout
+
+        // sync must precede detach; SetFile failure is non-fatal so its
+        // presence in the sequence is not required.
+        let paths = runner.commands.map(\.executableURL.path)
+        XCTAssertTrue(paths.contains("/usr/bin/hdiutil"))
+        XCTAssertTrue(paths.contains("/bin/sync"))
+        let syncIndex = paths.firstIndex(of: "/bin/sync")!
+        let detachIndex = paths.lastIndex(of: "/usr/bin/hdiutil")!
+        XCTAssertLessThan(syncIndex, detachIndex)
+        XCTAssertEqual(runner.commands[syncIndex].arguments, [])
+        XCTAssertEqual(runner.commands[detachIndex].arguments.first, "detach")
         try? builder.clean(context: context)
     }
 
@@ -404,16 +445,21 @@ final class DMGBuildNotarizeTests: XCTestCase {
     }
 
     func testFinderLayoutPositionsWindowItems() {
-        let script = DmgBuilder(runner: MockProcessRunner())
+        let script = DmgBuilder(runner: MockProcessRunner(), scriptRunner: MockAppleScriptRunner())
             .debugFinderLayoutScript(appName: "Fixture.app", mountPath: "/tmp/Mounted Fixture")
 
+        XCTAssertTrue(script.contains("set backgroundImageFile to POSIX file \"/tmp/Mounted Fixture/.background/background.png\" as alias"))
+        XCTAssertTrue(script.contains("set bounds to {100, 100, 640, 500}"))
+        XCTAssertTrue(script.contains("set background picture of iconViewOptions to backgroundImageFile"))
+        XCTAssertTrue(script.contains("set icon size of iconViewOptions to 144"))
         XCTAssertTrue(script.contains("set appItem to item \"Fixture.app\" of diskWindow"))
         XCTAssertTrue(script.contains("set applicationsItem to item \"Applications\" of diskWindow"))
-        XCTAssertTrue(script.contains("set position of applicationsItem to {430, 170}"))
+        XCTAssertTrue(script.contains("set position of appItem to {140, 175}"))
+        XCTAssertTrue(script.contains("set position of applicationsItem to {380, 175}"))
         XCTAssertTrue(script.contains("set text size of iconViewOptions to 12"))
         XCTAssertTrue(script.contains("set label position of iconViewOptions to bottom"))
-        XCTAssertTrue(script.contains("delay 1"))
-        XCTAssertFalse(script.contains("open diskFolder"))
+        XCTAssertTrue(script.contains("open diskFolder"))
+        XCTAssertTrue(script.contains("delay 2"))
         XCTAssertFalse(script.contains("set position of item \"Applications\" of diskFolder"))
     }
 
@@ -461,6 +507,18 @@ final class DMGBuildNotarizeTests: XCTestCase {
         settings.signingIdentityHash = identity.hash
         settings.notaryProfile = "DeveloperID"
         return settings
+    }
+}
+
+private final class MockAppleScriptRunner: AppleScriptRunning, @unchecked Sendable {
+    private(set) var sources: [String] = []
+    var error: Error?
+    var sideEffect: ((String) throws -> Void)?
+
+    func execute(_ source: String) async throws {
+        sources.append(source)
+        try sideEffect?(source)
+        if let error { throw error }
     }
 }
 
