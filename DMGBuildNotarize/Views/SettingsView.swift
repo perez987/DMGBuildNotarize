@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var settings: AppSettings
     @State private var isShowingCredentialSetup = false
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         Form {
@@ -68,11 +69,15 @@ struct SettingsView: View {
                         Image(systemName: "folder")
                     }
                     .help("Choose Default Output Folder")
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
                 }
             }
         }
         .formStyle(.grouped)
         .padding()
+        .onExitCommand { dismiss() }
         .task {
             await settings.refreshSigningIdentities()
         }
