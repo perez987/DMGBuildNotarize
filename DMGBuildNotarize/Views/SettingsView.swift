@@ -72,6 +72,7 @@ struct SettingsView: View {
                     Button("Cancel", role: .cancel) {
                         dismiss()
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
             }
         }
