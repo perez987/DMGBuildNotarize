@@ -4,6 +4,8 @@ DMGBuildNotarize is a simple Mac app that turns a signed `.app` bundle into a po
 
 In plain terms: drop in your Mac app, choose where the DMG should go, click **Build DMG**, and let the app run the packaging and Apple notarization steps for you.
 
+![Main window](Images/Main-window.png)
+
 ## The Problem
 
 Shipping a Mac app outside the Mac App Store is more confusing than it looks.
