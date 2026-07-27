@@ -56,7 +56,8 @@ final class PackagingController: ObservableObject {
 
             do {
                 let report = try await validator.validate(appURL: url) { [weak self] text in
-                    Task { @MainActor in self?.appendLog(text) }
+                    guard let self else { return }
+                    Task { @MainActor in self.appendLog(text) }
                 }
                 validationReport = report
                 appendLog("App signature is distribution-ready.\n")
@@ -115,10 +116,12 @@ final class PackagingController: ObservableObject {
             let result = try await pipeline.run(
                 job: job,
                 onStage: { [weak self] stage in
-                    Task { @MainActor in self?.markStageRunning(stage) }
+                    guard let self else { return }
+                    Task { @MainActor in self.markStageRunning(stage) }
                 },
                 onOutput: { [weak self] text in
-                    Task { @MainActor in self?.appendLog(text) }
+                    guard let self else { return }
+                    Task { @MainActor in self.appendLog(text) }
                 }
             )
 

@@ -11,13 +11,14 @@ struct StageListView: View {
                     .frame(width: 18)
 
                 Text(progress.stage.title)
+                    .foregroundColor(Color(nsColor: .labelColor))
                     .lineLimit(1)
 
                 Spacer()
             }
             .padding(.vertical, 3)
         }
-        .listStyle(.sidebar)
+        .listStyle(.inset)
     }
 
     private func symbol(for state: StageState) -> String {
