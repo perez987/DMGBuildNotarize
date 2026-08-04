@@ -39,4 +39,3 @@ struct StageListView: View {
         }
     }
 }
-

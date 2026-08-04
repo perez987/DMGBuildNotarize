@@ -60,7 +60,7 @@
 
 /* CredentialSetupSheet — form */
 "Profile" = "Perfil";
-"Profile Name" = "Nombre del perfil";
+"Profile Name" = "Nombre";
 "Credentials" = "Credenciales";
 "Method" = "Método";
 
@@ -82,7 +82,7 @@
 "Password" = "Contraseña";
 "App-specific password" = "Contraseña específica de la app";
 "Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Genérala en account.apple.com en Sign-In and Security > App-Specific Passwords. Tu cuenta de Apple debe tener la autenticación de dos factores activada.";
-"Open Apple Account Passwords" = "Abrir Contraseñas de la Cuenta Apple";
+"Open Apple Account Passwords" = "Contraseñas de la Cuenta Apple";
 "Use %@" = "Usar %@";
 
 /* CredentialSetupSheet — actions */

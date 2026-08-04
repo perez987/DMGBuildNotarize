@@ -33,13 +33,14 @@ struct ProgressLogView: View {
                 }
 
                 ScrollView {
-                    Text(logText.isEmpty ? String(localized: "Command output will appear here.") : logText)                        .font(.system(.caption, design: .monospaced))
+                    Text(logText.isEmpty ? String(localized: "Command output will appear here.") : logText)
+                        .font(.system(.caption, design: .monospaced))
                         .foregroundStyle(logText.isEmpty ? .secondary : .primary)
                         .textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(10)
                 }
-                .frame(minHeight: 180)
+                .frame(minHeight: 200)
                 .background(Color(nsColor: .textBackgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .overlay {

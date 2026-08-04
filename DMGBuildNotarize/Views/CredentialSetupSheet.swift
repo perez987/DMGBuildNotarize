@@ -128,13 +128,13 @@ struct CredentialSetupSheet: View {
             GridRow {
                 Text("Key ID")
                     .foregroundStyle(.secondary)
-                TextField("Key ID", text: $keyID)
+                TextField("", text: $keyID)
             }
 
             GridRow {
                 Text("Issuer ID")
                     .foregroundStyle(.secondary)
-                TextField("Issuer ID from Team Keys", text: $issuerID)
+                TextField("", text: $issuerID)
             }
 
             GridRow {
@@ -155,6 +155,7 @@ struct CredentialSetupSheet: View {
                     } label: {
                         Label("Open App Store Connect API Keys", systemImage: "arrow.up.forward.app")
                     }
+                    Spacer()
                 }
             }
         }
@@ -165,14 +166,14 @@ struct CredentialSetupSheet: View {
             GridRow {
                 Text("Apple ID")
                     .foregroundStyle(.secondary)
-                TextField("Apple ID", text: $appleID)
+                TextField("", text: $appleID)
             }
 
             GridRow {
                 Text("Team ID")
                     .foregroundStyle(.secondary)
                 HStack {
-                    TextField("Team ID", text: $teamID)
+                    TextField("", text: $teamID)
 
                     if let inferredTeamID = settings.selectedSigningIdentity?.teamID {
                         Button("Use \(inferredTeamID)") {
@@ -184,13 +185,12 @@ struct CredentialSetupSheet: View {
             }
 
             GridRow {
-                Text("Password")
+                Text("App-specific password")
                     .foregroundStyle(.secondary)
-                SecureField("App-specific password", text: appSpecificPasswordBinding)
+                SecureField("", text: appSpecificPasswordBinding)
             }
 
             GridRow {
-                Text("")
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled.")
                         .font(.caption)
@@ -203,6 +203,7 @@ struct CredentialSetupSheet: View {
                         Label("Open Apple Account Passwords", systemImage: "arrow.up.forward.app")
                     }
                 }
+                .gridCellColumns(2)
             }
         }
     }

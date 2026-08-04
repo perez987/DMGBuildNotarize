@@ -6,6 +6,23 @@ In plain terms: drop in your Mac app, choose where the DMG should go, click **Bu
 
 ![Main window](Images/Main-window.png)
 
+## Preface
+
+*carbocation* is the author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
+
+This fork focuses on compatibility with macOS Golden Gate. The application works very well on the new (still beta) version of macOS, but (often) fails on earlier versions, where the DMG file is created without the expected Finder window layout.
+
+The main credits for the core code goes to *carbocation*.
+
+These are my contributions to the project:
+
+- Add DMG styling: implement custom DMG background (include bundled background image asset) with enhanced design of the Finder window
+- Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
+- Update the app icon asset following Apple guidelines
+- Add explicit cancel/exit dismissal behavior to the settings view.
+
+---
+
 ## The Problem
 
 Shipping a Mac app outside the Mac App Store is more confusing than it looks.
@@ -59,7 +76,7 @@ It is not a replacement for building or signing your app. Your `.app` should alr
 
 You need:
 
-- macOS 14 or newer
+- macOS 27 Golden Gate
 - Xcode or Apple's command-line developer tools
 - an Apple Developer account
 - a Developer ID Application certificate in your Keychain
@@ -104,12 +121,6 @@ When it finishes, the output file is the DMG you can upload to your release page
 ## Build From Source
 
 Clone the repo, open `DMGBuildNotarize.xcodeproj` in Xcode, and run the `DMGBuildNotarize` scheme.
-
-To run the tests:
-
-```sh
-xcodebuild test -project DMGBuildNotarize.xcodeproj -scheme DMGBuildNotarize
-```
 
 ## Notes
 

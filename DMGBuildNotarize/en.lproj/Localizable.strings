@@ -82,7 +82,7 @@
 "Password" = "Password";
 "App-specific password" = "App-specific password";
 "Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled.";
-"Open Apple Account Passwords" = "Open Apple Account Passwords";
+"Open Apple Account Passwords" = "Apple Account Passwords";
 "Use %@" = "Use %@";
 
 /* CredentialSetupSheet — actions */

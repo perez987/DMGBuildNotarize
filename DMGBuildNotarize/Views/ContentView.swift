@@ -141,7 +141,7 @@ private struct HeaderView: View {
         }
     }
 
-    private var statusText: String {
+    @MainActor private var statusText: String {
         if controller.isRunning {
             return String(localized: "Packaging and notarizing")
         }
