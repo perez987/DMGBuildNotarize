@@ -37,15 +37,8 @@ struct DropTargetView: View {
     private func loadFirstURL(from providers: [NSItemProvider]) -> Bool {
         guard let provider = providers.first else { return false }
 
-        provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
-            let url: URL?
-            if let data = item as? Data {
-                url = URL(dataRepresentation: data, relativeTo: nil)
-            } else {
-                url = item as? URL
-            }
-
-            if let url {
+        _ = provider.loadObject(ofClass: URL.self) { item, _ in
+               if let url = item {
                 Task { @MainActor in onAppURL(url) }
             }
         }
