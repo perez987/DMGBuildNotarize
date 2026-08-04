@@ -122,6 +122,12 @@ When it finishes, the output file is the DMG you can upload to your release page
 
 Clone the repo, open `DMGBuildNotarize.xcodeproj` in Xcode, and run the `DMGBuildNotarize` scheme.
 
+To run the tests:
+
+```sh
+xcodebuild test -project DMGBuildNotarize.xcodeproj -scheme DMGBuildNotarize
+```
+
 ## Notes
 
 Notarization still goes through Apple. That means the Apple account, certificate, app signature, and notarization profile all need to be valid.
