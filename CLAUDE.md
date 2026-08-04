@@ -13,7 +13,7 @@
 - `DMGBuildNotarize/Support/`: shared helpers and utility code.
 
 ## Build and Test
-- Open `/home/runner/work/DMGBuildNotarize-2/DMGBuildNotarize-2/DMGBuildNotarize.xcodeproj` in Xcode and run the `DMGBuildNotarize` scheme.
+- Open `DMGBuildNotarize.xcodeproj` in Xcode and run the `DMGBuildNotarize` scheme.
 - Command-line tests:
   - `xcodebuild test -project DMGBuildNotarize.xcodeproj -scheme DMGBuildNotarize`
 

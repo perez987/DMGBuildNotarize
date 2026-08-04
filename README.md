@@ -23,6 +23,8 @@ These are my contributions to the project:
 
 ---
 
+# Original README
+
 ## The Problem
 
 Shipping a Mac app outside the Mac App Store is more confusing than it looks.
