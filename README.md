@@ -20,7 +20,7 @@ These are my contributions to the project:
 - Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
 - Update the app icon asset following Apple guidelines
 - Add explicit cancel/exit dismissal behavior to the settings view
-  Improve workflow messaging with concise status updates
+- Improve workflow messaging with concise status updates.
 
 ---
 
