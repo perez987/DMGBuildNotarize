@@ -10,7 +10,7 @@ In plain terms: drop in your Mac app, choose where the DMG should go, click **Bu
 
 *carbocation* is the author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
 
-This fork focuses on compatibility with macOS Golden Gate. The application works very well on the new (still beta) version of macOS, but (often) fails on earlier versions, where the DMG file is created without the expected Finder window layout.
+<!-- This fork focuses on compatibility with macOS Golden Gate. The application works very well on the new (still beta) version of macOS, but (often) fails on earlier versions, where the DMG file is created without the expected Finder window layout. -->
 
 The main credits for the core code goes to *carbocation*.
 
@@ -19,11 +19,13 @@ These are my contributions to the project:
 - Add DMG styling: implement custom DMG background (include bundled background image asset) with enhanced design of the Finder window
 - Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
 - Update the app icon asset following Apple guidelines
-- Add explicit cancel/exit dismissal behavior to the settings view.
+- Add explicit cancel/exit dismissal behavior to the settings view
+  Improve workflow messaging with concise status updates
 
 ---
 
 # Original README
+
 
 ## The Problem
 
@@ -78,7 +80,7 @@ It is not a replacement for building or signing your app. Your `.app` should alr
 
 You need:
 
-- macOS 27 Golden Gate
+- macOS 15 Sequoia
 - Xcode or Apple's command-line developer tools
 - an Apple Developer account
 - a Developer ID Application certificate in your Keychain
