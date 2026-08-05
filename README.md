@@ -12,7 +12,9 @@ In plain terms: drop in your Mac app, choose where the DMG should go, click **Bu
 
 <!-- This fork focuses on compatibility with macOS Golden Gate. The application works very well on the new (still beta) version of macOS, but (often) fails on earlier versions, where the DMG file is created without the expected Finder window layout. -->
 
-The main credits for the core code goes to *carbocation*.
+The main credits for the core code goes to *carbocation* (James Pirruccello).
+
+![About panel](Images/About.png)
 
 These are my contributions to the project:
 
