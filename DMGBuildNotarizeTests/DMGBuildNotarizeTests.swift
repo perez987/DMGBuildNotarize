@@ -63,6 +63,51 @@ final class DMGBuildNotarizeTests: XCTestCase {
         XCTAssertFalse(AppValidator.isDistributionReadySignature("Authority=Apple Development: Example Co (TEAMID)"))
     }
 
+    func testAppValidationLogsConciseSummaryInsteadOfToolOutput() async throws {
+        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let runner = MockProcessRunner(results: [
+            ProcessResult(
+                command: .system("/usr/bin/codesign", ["--verify"]),
+                terminationStatus: 0,
+                standardOutput: "codesign verbose output",
+                standardError: ""
+            ),
+            ProcessResult(
+                command: .system("/usr/bin/codesign", ["-dv"]),
+                terminationStatus: 0,
+                standardOutput: "",
+                standardError: """
+                Executable=/Applications/Fixture App.app/Contents/MacOS/Fixture App
+                Authority=Developer ID Application: Example Co (TEAMID)
+                """
+            ),
+            ProcessResult(
+                command: .system("/usr/sbin/spctl", ["-a"]),
+                terminationStatus: 0,
+                standardOutput: "",
+                standardError: """
+                /Applications/Fixture App.app: accepted
+                source=Notarized Developer ID
+                """
+            )
+        ])
+        let validator = AppValidator(runner: runner)
+        var logged = ""
+
+        _ = try await validator.validate(appURL: appURL) { text in
+            logged.append(text)
+        }
+
+        XCTAssertTrue(logged.contains("Checking code signature…"))
+        XCTAssertTrue(logged.contains("Reading signing certificate details…"))
+        XCTAssertTrue(logged.contains("Checking Gatekeeper acceptance…"))
+        XCTAssertTrue(logged.contains("App check summary:"))
+        XCTAssertTrue(logged.contains("Signing: Developer ID Application: Example Co (TEAMID)"))
+        XCTAssertTrue(logged.contains("Gatekeeper: /Applications/Fixture App.app: accepted"))
+        XCTAssertFalse(logged.contains("codesign verbose output"))
+        XCTAssertFalse(logged.contains("source=Notarized Developer ID"))
+    }
+
     func testNotarySubmissionParsing() throws {
         let submission = try NotaryClient.parseSubmission("""
         {"id":"1234","status":"Accepted","message":null}
@@ -525,10 +570,12 @@ private final class MockAppleScriptRunner: AppleScriptRunning, @unchecked Sendab
 private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
     private(set) var commands: [ProcessCommand] = []
     var result: ProcessResult?
+    var results: [ProcessResult]
     var error: Error?
 
-    init(result: ProcessResult? = nil, error: Error? = nil) {
+    init(result: ProcessResult? = nil, results: [ProcessResult] = [], error: Error? = nil) {
         self.result = result
+        self.results = results
         self.error = error
     }
 
@@ -539,7 +586,10 @@ private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
             throw error
         }
 
+        if !results.isEmpty {
+            return results.removeFirst()
+        }
+
         return result ?? ProcessResult(command: command, terminationStatus: 0, standardOutput: "", standardError: "")
     }
 }
-

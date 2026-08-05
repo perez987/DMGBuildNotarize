@@ -35,6 +35,7 @@ struct SettingsView: View {
 
                 if let identityLoadError = settings.identityLoadError {
                     Text(identityLoadError)
+                        .font(.body)
                         .foregroundStyle(.red)
                         .textSelection(.enabled)
                 }

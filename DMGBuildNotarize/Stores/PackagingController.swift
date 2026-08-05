@@ -119,7 +119,7 @@ final class PackagingController: ObservableObject {
                     guard let self else { return }
                     Task { @MainActor in self.markStageRunning(stage) }
                 },
-                onOutput: { [weak self] text in
+                print: { [weak self] text in
                     guard let self else { return }
                     Task { @MainActor in self.appendLog(text) }
                 }

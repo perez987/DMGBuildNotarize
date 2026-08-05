@@ -13,6 +13,7 @@ struct ProgressLogView: View {
                 if let errorMessage {
                     VStack(alignment: .leading, spacing: 8) {
                         Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
+                            .font(.body)
                             .foregroundStyle(.red)
                             .textSelection(.enabled)
 

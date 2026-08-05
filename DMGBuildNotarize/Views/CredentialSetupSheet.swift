@@ -72,6 +72,7 @@ struct CredentialSetupSheet: View {
 
             if let errorMessage {
                 Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
+                    .font(.body)
                     .foregroundStyle(.red)
                     .textSelection(.enabled)
             }

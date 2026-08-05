@@ -38,7 +38,7 @@ struct DropTargetView: View {
         guard let provider = providers.first else { return false }
 
         _ = provider.loadObject(ofClass: URL.self) { item, _ in
-               if let url = item {
+            if let url = item {
                 Task { @MainActor in onAppURL(url) }
             }
         }

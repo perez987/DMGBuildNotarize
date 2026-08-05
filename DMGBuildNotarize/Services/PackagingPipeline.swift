@@ -19,46 +19,67 @@ struct PackagingPipeline: @unchecked Sendable {
     func run(
         job: PackagingJob,
         onStage: @escaping @Sendable (PackagingStage) -> Void,
-        onOutput: @escaping @Sendable (String) -> Void
+        print: @escaping @Sendable (String) -> Void
     ) async throws -> PackagingResult {
         let context = try dmgBuilder.createContext(for: job)
         var submissionID: String?
 
         do {
             onStage(.validateApp)
-            _ = try await validator.validate(appURL: job.appInfo.url, onOutput: onOutput)
+            print("Validating app bundle: \(job.appInfo.url.lastPathComponent)\n")
+            _ = try await validator.validate(appURL: job.appInfo.url)
+            print("App bundle is distribution-signed (\(job.appInfo.displayName) \(job.appInfo.shortVersion)).\n")
 
             onStage(.validateNotaryProfile)
-            try await notaryClient.validateKeychainProfile(job.notaryProfile, onOutput: onOutput)
+            print("Validating notary Keychain profile \"\(job.notaryProfile)\"…\n")
+            try await notaryClient.validateKeychainProfile(job.notaryProfile)
+            print("Notary profile is valid.\n")
 
             onStage(.stageVolume)
+            print("Staging installer volume for \"\(job.volumeName)\"…\n")
             try dmgBuilder.prepareOutput(job.outputURL, replaceExisting: job.replaceExistingOutput)
             try dmgBuilder.stageVolume(job: job, context: context)
+            print("Installer volume staged.\n")
 
             onStage(.createReadWriteImage)
-            try await dmgBuilder.createReadWriteImage(job: job, context: context, onOutput: onOutput)
+            print("Creating writable DMG image…\n")
+            try await dmgBuilder.createReadWriteImage(job: job, context: context)
+            print("Writable DMG created.\n")
 
             onStage(.applyFinderLayout)
-            try await dmgBuilder.applyFinderLayout(job: job, context: context, onOutput: onOutput)
+            print("Applying Finder window layout…\n")
+            try await dmgBuilder.applyFinderLayout(job: job, context: context)
+            print("Finder layout applied.\n")
 
             onStage(.convertCompressedImage)
-            try await dmgBuilder.convertCompressedImage(context: context, onOutput: onOutput)
+            print("Compressing DMG image…\n")
+            try await dmgBuilder.convertCompressedImage(context: context)
+            print("DMG compressed.\n")
 
             onStage(.signDMG)
-            try await signingClient.signDMG(context.compressedImageURL, identity: job.signingIdentity, onOutput: onOutput)
+            print("Signing DMG with identity \"\(job.signingIdentity.name)\"…\n")
+            try await signingClient.signDMG(context.compressedImageURL, identity: job.signingIdentity)
+            print("DMG signed.\n")
 
             onStage(.notarize)
-            let submission = try await notaryClient.submitAndWait(dmgURL: context.compressedImageURL, keychainProfile: job.notaryProfile, onOutput: onOutput)
+            print("Submitting DMG to Apple notary service (this may take several minutes)…\n")
+            let submission = try await notaryClient.submitAndWait(dmgURL: context.compressedImageURL, keychainProfile: job.notaryProfile)
             submissionID = submission.id
+            print("Notarization accepted (submission ID: \(submission.id)).\n")
 
             onStage(.staple)
-            try await notaryClient.staple(dmgURL: context.compressedImageURL, onOutput: onOutput)
+            print("Stapling notarization ticket to DMG…\n")
+            try await notaryClient.staple(dmgURL: context.compressedImageURL)
+            print("Ticket stapled.\n")
 
             onStage(.verify)
-            try await notaryClient.validateStaple(dmgURL: context.compressedImageURL, onOutput: onOutput)
-            try await dmgBuilder.verifyImage(context.compressedImageURL, onOutput: onOutput)
+            print("Verifying stapled DMG…\n")
+            try await notaryClient.validateStaple(dmgURL: context.compressedImageURL)
+            try await dmgBuilder.verifyImage(context.compressedImageURL)
+            print("Verification passed.\n")
 
             try dmgBuilder.publishOutput(context: context, replaceExisting: job.replaceExistingOutput)
+            print("DMG written to: \(job.outputURL.path)\n")
 
             try? dmgBuilder.clean(context: context)
             return PackagingResult(outputURL: job.outputURL, notarizationID: submissionID)

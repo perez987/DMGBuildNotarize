@@ -10,25 +10,34 @@ struct AppValidator: Sendable {
     func validate(appURL: URL, onOutput: @escaping @Sendable (String) -> Void = { _ in }) async throws -> ValidationReport {
         let info = try AppBundleInfo.load(from: appURL)
 
+        onOutput(String(localized: "Checking code signature…\n"))
+
         let verifyResult = try await runner.run(
             .system("/usr/bin/codesign", ["--verify", "--deep", "--strict", "--verbose=2", appURL.path]),
-            onOutput: onOutput
+            onOutput: { _ in }
         )
+
+        onOutput(String(localized: "Reading signing certificate details…\n"))
 
         let detailsResult = try await runner.run(
             .system("/usr/bin/codesign", ["-dv", "--verbose=4", appURL.path]),
-            onOutput: onOutput
+            onOutput: { _ in }
         )
 
         let details = detailsResult.combinedOutput
         guard Self.isDistributionReadySignature(details) else {
-            throw AppValidationError.notDistributionSigned(details.trimmingCharacters(in: .whitespacesAndNewlines))
+            let authority = Self.firstMatch(in: details, prefix: "Authority=") ?? ""
+            throw AppValidationError.notDistributionSigned(authority)
         }
+
+        onOutput(String(localized: "Checking Gatekeeper acceptance…\n"))
 
         let gatekeeperResult = try await runner.run(
             .system("/usr/sbin/spctl", ["-a", "-vv", "-t", "execute", appURL.path]),
-            onOutput: onOutput
+            onOutput: { _ in }
         )
+
+        onOutput(Self.makeSummary(info: info, details: details, gatekeeperOutput: gatekeeperResult.combinedOutput))
 
         return ValidationReport(
             appInfo: info,
@@ -46,6 +55,34 @@ struct AppValidator: Sendable {
         ]
         return acceptedMarkers.contains { codesignDetails.contains($0) }
     }
+
+    private static func makeSummary(info: AppBundleInfo, details: String, gatekeeperOutput: String) -> String {
+        let signingAuthority = firstMatch(in: details, prefix: "Authority=") ?? String(localized: "Unknown signing authority")
+        let executable = firstMatch(in: details, prefix: "Executable=") ?? info.displayName
+        let gatekeeperStatus = gatekeeperOutput
+            .split(whereSeparator: \.isNewline)
+            .map(String.init)
+            .first { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } ?? String(localized: "Gatekeeper status unavailable")
+
+        return String(
+            localized: """
+            App check summary:
+            • App: \(info.displayName) \(info.shortVersion)
+            • Executable: \(executable)
+            • Signing: \(signingAuthority)
+            • Gatekeeper: \(gatekeeperStatus)
+            """
+        ) + "\n"
+    }
+
+    private static func firstMatch(in text: String, prefix: String) -> String? {
+        text
+            .split(whereSeparator: \.isNewline)
+            .map(String.init)
+            .first { $0.hasPrefix(prefix) }
+            .map { String($0.dropFirst(prefix.count)) }
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+    }
 }
 
 enum AppValidationError: LocalizedError, Equatable {
@@ -53,12 +90,11 @@ enum AppValidationError: LocalizedError, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .notDistributionSigned(let details):
-            if details.isEmpty {
-                return "The app is signed, but not with a recognized Developer ID Application distribution certificate."
+        case .notDistributionSigned(let authority):
+            if authority.isEmpty {
+                return "Not signed with a Developer ID Application certificate."
             }
-            return "The app is signed, but not with a recognized Developer ID Application distribution certificate:\n\(details)"
+            return "Not signed with Developer ID Application certificate:\n(\(authority))."
         }
     }
 }
-
