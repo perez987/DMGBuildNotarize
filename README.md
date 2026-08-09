@@ -8,9 +8,7 @@ In plain terms: drop in your Mac app, choose where the DMG should go, click **Bu
 
 ## Preface
 
-*carbocation* is the author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
-
-The main credits for the core code goes to *carbocation* (James Pirruccello).
+The main credits for the core code goes to *carbocation* (James Pirruccello), author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
 
 These are my contributions to the project:
 
