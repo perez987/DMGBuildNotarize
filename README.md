@@ -21,6 +21,48 @@ These are my contributions to the project:
 - Add explicit cancel/exit dismissal behavior to the settings view
 - Improve workflow messaging with concise status updates.
 
+## Add-on: create-dmg
+
+DMGBuildNotarize offers two ways to apply the layout to the DMG Finder window: AppleScript (implemented in the original repository) and [create-dmg](https://github.com/sindresorhus/create-dmg) by *Sindresorhus*, recently added, free command line tool that requires Node.js to be installed.
+
+When `create-dmg` is found at `/usr/local/bin/create-dmg` (Intel) or `/opt/homebrew/bin/create-dmg` (Apple Silicon), DMGBuildNotarize uses it instead of the AppleScript-based Finder layout. This is faster, does not require Automation permission, and works reliably across macOS versions. If `create-dmg` is not installed the app falls back to the AppleScript flow automatically.
+
+The prerequisite to have `create-dmg` is Node.js 20 or later installed. One way to install Node is through the Homebrew package manager. While this is an extra step compared to installing Node directly from its own installer, it can help you avoid permissions errors and other issues.
+
+#### Install Homebrew:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+#### Install Node:
+
+`brew install node`
+
+#### Install create-dmg:
+
+- Run<br>`npm install --global create-dmg` in Terminal
+- Optional: If you get a message about<br>`allow-scripts=fs-xattr,macos-alias`<br>run<br>`npm config set allow-scripts=fs-xattr,macos-alias --location=user`
+- `create-dmg` is available in `/usr/local/bin/create-dmg` (Intel Mac) or `/opt/homebrew/bin/create-dmg` (Silicon Mac).
+
+#### DMGBuildNotarize process
+
+The app first checks if `create-dmg` exists on the system, in which case it's the tool that builds the DMG file with an elegant windowed layout. If it doesn't exist, it falls back to AppleScript, which, although slower and less reliable across macOS versions, guarantees that at least the DMG file will be created, with or without a styled Finder window.
+
+#### Result
+
+The DMG image created by `create-dmg` has an elegant design that I really like and the process is really fast:
+
+- 2 icons: app and Applications link
+- larger icon size
+- background with drag and drop indication
+- window size adjusted to the background
+- the open disk image icon has the application icon integrated.
+
+|     |
+|:---:|
+| ![DMG window](Images/DMG-window.png) |
+
 ---
 
 ## The Problem
@@ -87,7 +129,7 @@ You need:
 - Node.js 20 or later (install via [Homebrew](https://brew.sh): `brew install node`)
 - the `create-dmg` npm package: `npm install --global create-dmg`
 
-When `create-dmg` is found at `/usr/local/bin/create-dmg` (Intel) or `/opt/homebrew/bin/create-dmg` (Apple Silicon), DMGBuildNotarize uses it instead of the AppleScript-based Finder layout. This is faster, does not require Automation permission, and works reliably across macOS versions. If `create-dmg` is not installed the app falls back to the AppleScript flow automatically.
+**notarytool profile**
 
 If you do not already have a `notarytool` profile, open Settings in DMGBuildNotarize and use **Create or Validate Profile**. The default profile name is `DeveloperID`.
 
