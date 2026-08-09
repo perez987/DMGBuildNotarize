@@ -3,7 +3,7 @@ import Foundation
 struct NotaryClient: Sendable {
     let runner: any ProcessRunning
 
-    init(runner: any ProcessRunning = ProcessRunner()) {
+    nonisolated init(runner: any ProcessRunning = ProcessRunner()) {
         self.runner = runner
     }
 
@@ -103,10 +103,14 @@ struct NotaryClient: Sendable {
     }
 }
 
-struct NotarySubmission: Decodable, Equatable {
+struct NotarySubmission: Decodable, Equatable, Sendable {
     let id: String
     let status: String
     let message: String?
+
+    nonisolated static func == (lhs: NotarySubmission, rhs: NotarySubmission) -> Bool {
+        lhs.id == rhs.id && lhs.status == rhs.status && lhs.message == rhs.message
+    }
 }
 
 enum NotaryError: LocalizedError, Equatable {

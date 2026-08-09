@@ -10,11 +10,7 @@ In plain terms: drop in your Mac app, choose where the DMG should go, click **Bu
 
 *carbocation* is the author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
 
-<!-- This fork focuses on compatibility with macOS Golden Gate. The application works very well on the new (still beta) version of macOS, but (often) fails on earlier versions, where the DMG file is created without the expected Finder window layout. -->
-
 The main credits for the core code goes to *carbocation* (James Pirruccello).
-
-![About panel](Images/About.png)
 
 These are my contributions to the project:
 
@@ -25,9 +21,6 @@ These are my contributions to the project:
 - Improve workflow messaging with concise status updates.
 
 ---
-
-# Original README
-
 
 ## The Problem
 
@@ -55,7 +48,7 @@ It:
 - checks that your `.app` bundle looks valid
 - checks that the app is signed with a Developer ID Application certificate
 - creates a standard DMG with your app and an Applications shortcut
-- styles the DMG Finder window with a built-in background, larger icons, and a drag-to-Applications layout
+- styles the DMG Finder window with a built-in background, larger icons, and a drag-to-Applications layout (via `create-dmg` when installed, or AppleScript as fallback)
 - compresses the DMG
 - signs the DMG
 - submits the DMG to Apple for notarization
@@ -82,11 +75,18 @@ It is not a replacement for building or signing your app. Your `.app` should alr
 
 You need:
 
-- macOS 15 Sequoia
+- macOS 14+
 - Xcode or Apple's command-line developer tools
 - an Apple Developer account
 - a Developer ID Application certificate in your Keychain
 - a `notarytool` Keychain profile
+
+**Optional — for faster, permission-free DMG styling:**
+
+- Node.js 20 or later (install via [Homebrew](https://brew.sh): `brew install node`)
+- the `create-dmg` npm package: `npm install --global create-dmg`
+
+When `create-dmg` is found at `/usr/local/bin/create-dmg` (Intel) or `/opt/homebrew/bin/create-dmg` (Apple Silicon), DMGBuildNotarize uses it instead of the AppleScript-based Finder layout. This is faster, does not require Automation permission, and works reliably across macOS versions. If `create-dmg` is not installed the app falls back to the AppleScript flow automatically.
 
 If you do not already have a `notarytool` profile, open Settings in DMGBuildNotarize and use **Create or Validate Profile**. The default profile name is `DeveloperID`.
 

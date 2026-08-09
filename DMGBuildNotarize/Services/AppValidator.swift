@@ -3,7 +3,7 @@ import Foundation
 struct AppValidator: Sendable {
     let runner: any ProcessRunning
 
-    init(runner: any ProcessRunning = ProcessRunner()) {
+    nonisolated init(runner: any ProcessRunning = ProcessRunner()) {
         self.runner = runner
     }
 

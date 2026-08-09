@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct OutputSettingsView: View {
     @ObservedObject var controller: PackagingController

@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @ObservedObject var settings: AppSettings
@@ -24,7 +25,7 @@ struct ContentView: View {
 
                 StageListView(stages: controller.stageProgress)
             }
-            .navigationSplitViewColumnWidth(min: 280, ideal: 320, max: 360)
+            .navigationSplitViewColumnWidth(min: 280, ideal: 280, max: 280)
         } detail: {
             VStack(spacing: 0) {
                 HeaderView(controller: controller, settings: settings)

@@ -593,3 +593,4 @@ private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
         return result ?? ProcessResult(command: command, terminationStatus: 0, standardOutput: "", standardError: "")
     }
 }
+

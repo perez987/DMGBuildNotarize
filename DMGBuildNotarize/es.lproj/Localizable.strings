@@ -16,8 +16,8 @@
 
 /* DropTargetView */
 "Inspecting App" = "Inspeccionando App";
-"Drop Signed App" = "Arrastra App Firmada";
-".app bundle" = "Paquete .app";
+"Drop Signed App" = "Suelta aquí una Aplicación firmada";
+".app bundle" = "(.app)";
 
 /* AppSummaryView */
 "App" = "App";
@@ -88,14 +88,17 @@
 /* CredentialSetupSheet — actions */
 "Store & Validate" = "Guardar y Validar";
 
-/* PackagingStage titles */
+/* PackagingStage titles — AppleScript path */
 "Validate app" = "Validar app";
 "Validate notary profile" = "Validar perfil de notarización";
 "Stage installer" = "Preparar instalador";
 "Create writable DMG" = "Crear DMG editable";
 "Apply Finder layout" = "Aplicar diseño al Finder";
 "Compress DMG" = "Comprimir DMG";
+
+/* PackagingStage titles — create-dmg path (Build DMG key shared with toolbar button above) */
 "Sign DMG" = "Firmar DMG";
 "Notarize" = "Notarizar";
 "Staple ticket" = "Adjuntar ticket";
 "Verify" = "Verificar";
+

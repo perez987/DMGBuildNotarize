@@ -7,7 +7,7 @@ final class PackagingController: ObservableObject {
     @Published var validationReport: ValidationReport?
     @Published var outputURL: URL?
     @Published var volumeName = ""
-    @Published var stageProgress: [StageProgress] = PackagingStage.allCases.map { StageProgress(stage: $0, state: .pending) }
+    @Published var stageProgress: [StageProgress]
     @Published var logText = ""
     @Published var errorMessage: String?
     @Published var credentialSetupProfileName: String?
@@ -27,6 +27,7 @@ final class PackagingController: ObservableObject {
         self.settings = settings
         self.validator = validator
         self.pipeline = pipeline
+        self.stageProgress = pipeline.stages.map { StageProgress(stage: $0, state: .pending) }
     }
 
     var canBuild: Bool {
@@ -140,7 +141,7 @@ final class PackagingController: ObservableObject {
     }
 
     func resetProgress() {
-        stageProgress = PackagingStage.allCases.map { StageProgress(stage: $0, state: .pending) }
+        stageProgress = pipeline.stages.map { StageProgress(stage: $0, state: .pending) }
         logText = ""
     }
 

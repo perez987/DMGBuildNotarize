@@ -13,6 +13,13 @@ struct ProcessCommand: Equatable, Sendable {
     var displayString: String {
         ([executableURL.path] + arguments).map { $0.shellSingleQuoted }.joined(separator: " ")
     }
+
+    nonisolated static func == (lhs: ProcessCommand, rhs: ProcessCommand) -> Bool {
+        lhs.executableURL == rhs.executableURL &&
+        lhs.arguments == rhs.arguments &&
+        lhs.environment == rhs.environment &&
+        lhs.timeout == rhs.timeout
+    }
 }
 
 struct ProcessResult: Equatable, Sendable {
@@ -23,6 +30,13 @@ struct ProcessResult: Equatable, Sendable {
 
     var combinedOutput: String {
         [standardOutput, standardError].filter { !$0.isEmpty }.joined(separator: "\n")
+    }
+
+    nonisolated static func == (lhs: ProcessResult, rhs: ProcessResult) -> Bool {
+        lhs.command == rhs.command &&
+        lhs.terminationStatus == rhs.terminationStatus &&
+        lhs.standardOutput == rhs.standardOutput &&
+        lhs.standardError == rhs.standardError
     }
 }
 
@@ -50,6 +64,8 @@ protocol ProcessRunning: Sendable {
 }
 
 final class ProcessRunner: ProcessRunning {
+    nonisolated init() {}
+
     @discardableResult
     func run(_ command: ProcessCommand, onOutput: @escaping @Sendable (String) -> Void = { _ in }) async throws -> ProcessResult {
         let process = Process()
@@ -144,7 +160,7 @@ private final class RunningProcess: @unchecked Sendable {
         self.process = process
     }
 
-    func terminate() {
+    nonisolated func terminate() {
         lock.withLock {
             if process.isRunning {
                 process.terminate()
@@ -154,31 +170,31 @@ private final class RunningProcess: @unchecked Sendable {
 }
 
 private final class OutputBuffer: @unchecked Sendable {
-    private var storage = ""
+    nonisolated(unsafe) private var storage = ""
     private let lock = NSLock()
 
-    func append(_ text: String) {
+    nonisolated func append(_ text: String) {
         lock.withLock {
             storage.append(text)
         }
     }
 
-    var content: String {
+    nonisolated var content: String {
         lock.withLock { storage }
     }
 }
 
 private final class AtomicFlag: @unchecked Sendable {
-    private var storage = false
+    nonisolated(unsafe) private var storage = false
     private let lock = NSLock()
 
-    func set() {
+    nonisolated func set() {
         lock.withLock {
             storage = true
         }
     }
 
-    var value: Bool {
+    nonisolated var value: Bool {
         lock.withLock { storage }
     }
 }

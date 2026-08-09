@@ -59,7 +59,7 @@ final class AppSettings: ObservableObject {
         self.signingIdentityHash = defaults.string(forKey: Keys.signingIdentityHash) ?? ""
         self.notaryProfile = defaults.string(forKey: Keys.notaryProfile) ?? "DeveloperID"
         self.defaultOutputFolderPath = defaults.string(forKey: Keys.defaultOutputFolderPath)
-            ?? FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.path
+        ?? FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first?.path
             ?? FileManager.default.homeDirectoryForCurrentUser.path
         self.savedNotaryCredentialMode = defaults.string(forKey: Keys.savedNotaryCredentialMode) ?? ""
         self.savedNotaryAppleID = defaults.string(forKey: Keys.savedNotaryAppleID) ?? ""

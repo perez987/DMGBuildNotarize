@@ -13,6 +13,8 @@ protocol AppleScriptRunning: Sendable {
 /// while guaranteeing it is never executed concurrently (`NSAppleScript` is
 /// not thread-safe).
 struct DefaultAppleScriptRunner: AppleScriptRunning {
+    nonisolated init() {}
+
     private static let queue = DispatchQueue(
         label: "DMGBuildNotarize.applescript",
         qos: .userInitiated

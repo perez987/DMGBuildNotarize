@@ -42,9 +42,9 @@ struct DmgBuilder: @unchecked Sendable {
 
     let runner: any ProcessRunning
     let scriptRunner: any AppleScriptRunning
-    let fileManager: FileManager
+    nonisolated(unsafe) let fileManager: FileManager
 
-    init(
+    nonisolated init(
         runner: any ProcessRunning = ProcessRunner(),
         scriptRunner: any AppleScriptRunning = DefaultAppleScriptRunner(),
         fileManager: FileManager = .default

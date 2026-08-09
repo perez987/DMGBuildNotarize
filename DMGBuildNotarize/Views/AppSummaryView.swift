@@ -5,7 +5,7 @@ struct AppSummaryView: View {
     let report: ValidationReport?
 
     var body: some View {
-        GroupBox("App") {
+        GroupBox("") {
             if let info {
                 Grid(alignment: .leading, horizontalSpacing: 18, verticalSpacing: 8) {
                     SummaryRow("Name", info.displayName)
@@ -16,8 +16,15 @@ struct AppSummaryView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else {
-                ContentUnavailableView("No App Selected", systemImage: "app.badge")
-                    .frame(maxWidth: .infinity, minHeight: 130)
+                VStack(spacing: 8) {
+                    Image(systemName: "app.badge")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.secondary)
+                    Text("No App Selected")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, minHeight: 130)
             }
         }
     }

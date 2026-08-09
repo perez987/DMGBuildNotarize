@@ -7,6 +7,9 @@ enum PackagingStage: String, CaseIterable, Identifiable {
     case createReadWriteImage
     case applyFinderLayout
     case convertCompressedImage
+    /// Used when `create-dmg` is installed. Replaces the four AppleScript-based
+    /// stages above with a single polished-DMG build step.
+    case buildDMG
     case signDMG
     case notarize
     case staple
@@ -22,6 +25,7 @@ enum PackagingStage: String, CaseIterable, Identifiable {
         case .createReadWriteImage: return String(localized: "Create writable DMG")
         case .applyFinderLayout: return String(localized: "Apply Finder layout")
         case .convertCompressedImage: return String(localized: "Compress DMG")
+        case .buildDMG: return String(localized: "Build DMG")
         case .signDMG: return String(localized: "Sign DMG")
         case .notarize: return String(localized: "Notarize")
         case .staple: return String(localized: "Staple ticket")

@@ -88,14 +88,17 @@
 /* CredentialSetupSheet — actions */
 "Store & Validate" = "Store & Validate";
 
-/* PackagingStage titles */
+/* PackagingStage titles — AppleScript path */
 "Validate app" = "Validate app";
 "Validate notary profile" = "Validate notary profile";
 "Stage installer" = "Stage installer";
 "Create writable DMG" = "Create writable DMG";
 "Apply Finder layout" = "Apply Finder layout";
 "Compress DMG" = "Compress DMG";
+
+/* PackagingStage titles — create-dmg path (Build DMG key shared with toolbar button above) */
 "Sign DMG" = "Sign DMG";
 "Notarize" = "Notarize";
 "Staple ticket" = "Staple ticket";
 "Verify" = "Verify";
+

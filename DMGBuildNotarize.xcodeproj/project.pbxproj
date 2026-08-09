@@ -3,95 +3,31 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 100;
+	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		D96CF3493017DBA4006B5197 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D96CF3473017DBA4006B5197 /* Localizable.strings */; };
-		D9DDD5A23017D8B10055AF6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9DDD5A13017D8B10055AF6B /* Assets.xcassets */; };
-		D9DDD5A53017D8B80055AF6B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = D9DDD5A33017D8B80055AF6B /* background.png */; };
-		D9DDD5A83017D8BF0055AF6B /* AppIcon-Source.png in Resources */ = {isa = PBXBuildFile; fileRef = D9DDD5A63017D8BF0055AF6B /* AppIcon-Source.png */; };
-		D9DDD5AF3017D8DA0055AF6B /* AppBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5A93017D8DA0055AF6B /* AppBundleInfo.swift */; };
-		D9DDD5B03017D8DA0055AF6B /* PackagingJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5AA3017D8DA0055AF6B /* PackagingJob.swift */; };
-		D9DDD5B13017D8DA0055AF6B /* PackagingStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5AB3017D8DA0055AF6B /* PackagingStage.swift */; };
-		D9DDD5B23017D8DA0055AF6B /* SigningIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5AC3017D8DA0055AF6B /* SigningIdentity.swift */; };
-		D9DDD5B33017D8DA0055AF6B /* ValidationReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5AD3017D8DA0055AF6B /* ValidationReport.swift */; };
-		D9DDD5B53017D91D0055AF6B /* DMGBuildNotarizeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5B43017D91D0055AF6B /* DMGBuildNotarizeApp.swift */; };
-		D9DDD5C23017D9300055AF6B /* AppleScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5B93017D9300055AF6B /* AppleScriptRunner.swift */; };
-		D9DDD5C33017D9300055AF6B /* AppValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5BA3017D9300055AF6B /* AppValidator.swift */; };
-		D9DDD5C43017D9300055AF6B /* CredentialSetupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5BB3017D9300055AF6B /* CredentialSetupService.swift */; };
-		D9DDD5C53017D9300055AF6B /* DmgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5BC3017D9300055AF6B /* DmgBuilder.swift */; };
-		D9DDD5C63017D9300055AF6B /* NotaryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5BD3017D9300055AF6B /* NotaryClient.swift */; };
-		D9DDD5C73017D9300055AF6B /* PackagingPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5BE3017D9300055AF6B /* PackagingPipeline.swift */; };
-		D9DDD5C83017D9300055AF6B /* ProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5BF3017D9300055AF6B /* ProcessRunner.swift */; };
-		D9DDD5C93017D9300055AF6B /* SigningClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5C03017D9300055AF6B /* SigningClient.swift */; };
-		D9DDD5CD3017D9350055AF6B /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5CA3017D9350055AF6B /* AppSettings.swift */; };
-		D9DDD5CE3017D9350055AF6B /* PackagingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5CB3017D9350055AF6B /* PackagingController.swift */; };
-		D9DDD5D33017D93B0055AF6B /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5CF3017D93B0055AF6B /* KeychainHelper.swift */; };
-		D9DDD5D43017D93B0055AF6B /* StringSanitizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5D03017D93B0055AF6B /* StringSanitizing.swift */; };
-		D9DDD5D53017D93B0055AF6B /* URLHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5D13017D93B0055AF6B /* URLHelpers.swift */; };
-		D9DDD5DF3017D93F0055AF6B /* AppSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5D63017D93F0055AF6B /* AppSummaryView.swift */; };
-		D9DDD5E03017D93F0055AF6B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5D73017D93F0055AF6B /* ContentView.swift */; };
-		D9DDD5E13017D93F0055AF6B /* CredentialSetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5D83017D93F0055AF6B /* CredentialSetupSheet.swift */; };
-		D9DDD5E23017D93F0055AF6B /* DropTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5D93017D93F0055AF6B /* DropTargetView.swift */; };
-		D9DDD5E33017D93F0055AF6B /* OutputSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5DA3017D93F0055AF6B /* OutputSettingsView.swift */; };
-		D9DDD5E43017D93F0055AF6B /* ProgressLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5DB3017D93F0055AF6B /* ProgressLogView.swift */; };
-		D9DDD5E53017D93F0055AF6B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5DC3017D93F0055AF6B /* SettingsView.swift */; };
-		D9DDD5E63017D93F0055AF6B /* StageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9DDD5DD3017D93F0055AF6B /* StageListView.swift */; };
-		D9DDD5EA3017DADD0055AF6B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9DDD5E93017DADD0055AF6B /* Preview Assets.xcassets */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
-		D910BBF13022308700A3A67C /* PBXContainerItemProxy */ = {
+		D960019D3028636B0009A836 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D9F473D13017D3DD002D727E /* Project object */;
+			containerPortal = D9600187302863690009A836 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D9F473D83017D3DD002D727E;
+			remoteGlobalIDString = D960018E302863690009A836;
 			remoteInfo = DMGBuildNotarize;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D910BBED3022308700A3A67C /* DMGBuildNotarizeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DMGBuildNotarizeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D96CF3483017DBA4006B5197 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D96CF34A3017DBD8006B5197 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D9DDD5A13017D8B10055AF6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D9DDD5A33017D8B80055AF6B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
-		D9DDD5A63017D8BF0055AF6B /* AppIcon-Source.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-Source.png"; sourceTree = "<group>"; };
-		D9DDD5A93017D8DA0055AF6B /* AppBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppBundleInfo.swift; sourceTree = "<group>"; };
-		D9DDD5AA3017D8DA0055AF6B /* PackagingJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagingJob.swift; sourceTree = "<group>"; };
-		D9DDD5AB3017D8DA0055AF6B /* PackagingStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagingStage.swift; sourceTree = "<group>"; };
-		D9DDD5AC3017D8DA0055AF6B /* SigningIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigningIdentity.swift; sourceTree = "<group>"; };
-		D9DDD5AD3017D8DA0055AF6B /* ValidationReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationReport.swift; sourceTree = "<group>"; };
-		D9DDD5B43017D91D0055AF6B /* DMGBuildNotarizeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DMGBuildNotarizeApp.swift; sourceTree = "<group>"; };
-		D9DDD5B93017D9300055AF6B /* AppleScriptRunner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleScriptRunner.swift; sourceTree = "<group>"; };
-		D9DDD5BA3017D9300055AF6B /* AppValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppValidator.swift; sourceTree = "<group>"; };
-		D9DDD5BB3017D9300055AF6B /* CredentialSetupService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialSetupService.swift; sourceTree = "<group>"; };
-		D9DDD5BC3017D9300055AF6B /* DmgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DmgBuilder.swift; sourceTree = "<group>"; };
-		D9DDD5BD3017D9300055AF6B /* NotaryClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotaryClient.swift; sourceTree = "<group>"; };
-		D9DDD5BE3017D9300055AF6B /* PackagingPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagingPipeline.swift; sourceTree = "<group>"; };
-		D9DDD5BF3017D9300055AF6B /* ProcessRunner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessRunner.swift; sourceTree = "<group>"; };
-		D9DDD5C03017D9300055AF6B /* SigningClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigningClient.swift; sourceTree = "<group>"; };
-		D9DDD5CA3017D9350055AF6B /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		D9DDD5CB3017D9350055AF6B /* PackagingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagingController.swift; sourceTree = "<group>"; };
-		D9DDD5CF3017D93B0055AF6B /* KeychainHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
-		D9DDD5D03017D93B0055AF6B /* StringSanitizing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringSanitizing.swift; sourceTree = "<group>"; };
-		D9DDD5D13017D93B0055AF6B /* URLHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHelpers.swift; sourceTree = "<group>"; };
-		D9DDD5D63017D93F0055AF6B /* AppSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSummaryView.swift; sourceTree = "<group>"; };
-		D9DDD5D73017D93F0055AF6B /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D9DDD5D83017D93F0055AF6B /* CredentialSetupSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialSetupSheet.swift; sourceTree = "<group>"; };
-		D9DDD5D93017D93F0055AF6B /* DropTargetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropTargetView.swift; sourceTree = "<group>"; };
-		D9DDD5DA3017D93F0055AF6B /* OutputSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutputSettingsView.swift; sourceTree = "<group>"; };
-		D9DDD5DB3017D93F0055AF6B /* ProgressLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressLogView.swift; sourceTree = "<group>"; };
-		D9DDD5DC3017D93F0055AF6B /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		D9DDD5DD3017D93F0055AF6B /* StageListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StageListView.swift; sourceTree = "<group>"; };
-		D9DDD5E73017D9440055AF6B /* DMGBuildNotarize.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DMGBuildNotarize.entitlements; sourceTree = "<group>"; };
-		D9DDD5E93017DADD0055AF6B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D9F473D93017D3DD002D727E /* DMGBuildNotarize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMGBuildNotarize.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D960018F302863690009A836 /* DMGBuildNotarize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMGBuildNotarize.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D960019C3028636B0009A836 /* DMGBuildNotarizeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DMGBuildNotarizeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D910BBEE3022308700A3A67C /* DMGBuildNotarizeTests */ = {
+		D9600191302863690009A836 /* DMGBuildNotarize */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DMGBuildNotarize;
+			sourceTree = "<group>";
+		};
+		D960019F3028636B0009A836 /* DMGBuildNotarizeTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DMGBuildNotarizeTests;
 			sourceTree = "<group>";
@@ -99,208 +35,109 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D910BBEA3022308700A3A67C /* Frameworks */ = {
+		D960018C302863690009A836 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D9F473D63017D3DD002D727E /* Frameworks */ = {
+		D96001993028636B0009A836 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D9DDD59F3017D8A80055AF6B /* App */ = {
+		D9600186302863690009A836 = {
 			isa = PBXGroup;
 			children = (
-				D9DDD5B43017D91D0055AF6B /* DMGBuildNotarizeApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		D9DDD5A43017D8B80055AF6B /* Background */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5A33017D8B80055AF6B /* background.png */,
-			);
-			path = Background;
-			sourceTree = "<group>";
-		};
-		D9DDD5A73017D8BF0055AF6B /* DesignAssets */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5A63017D8BF0055AF6B /* AppIcon-Source.png */,
-			);
-			path = DesignAssets;
-			sourceTree = "<group>";
-		};
-		D9DDD5AE3017D8DA0055AF6B /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5A93017D8DA0055AF6B /* AppBundleInfo.swift */,
-				D9DDD5AA3017D8DA0055AF6B /* PackagingJob.swift */,
-				D9DDD5AB3017D8DA0055AF6B /* PackagingStage.swift */,
-				D9DDD5AC3017D8DA0055AF6B /* SigningIdentity.swift */,
-				D9DDD5AD3017D8DA0055AF6B /* ValidationReport.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		D9DDD5C13017D9300055AF6B /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5B93017D9300055AF6B /* AppleScriptRunner.swift */,
-				D9DDD5BA3017D9300055AF6B /* AppValidator.swift */,
-				D9DDD5BB3017D9300055AF6B /* CredentialSetupService.swift */,
-				D9DDD5BC3017D9300055AF6B /* DmgBuilder.swift */,
-				D9DDD5BD3017D9300055AF6B /* NotaryClient.swift */,
-				D9DDD5BE3017D9300055AF6B /* PackagingPipeline.swift */,
-				D9DDD5BF3017D9300055AF6B /* ProcessRunner.swift */,
-				D9DDD5C03017D9300055AF6B /* SigningClient.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		D9DDD5CC3017D9350055AF6B /* Stores */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5CA3017D9350055AF6B /* AppSettings.swift */,
-				D9DDD5CB3017D9350055AF6B /* PackagingController.swift */,
-			);
-			path = Stores;
-			sourceTree = "<group>";
-		};
-		D9DDD5D23017D93B0055AF6B /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5CF3017D93B0055AF6B /* KeychainHelper.swift */,
-				D9DDD5D03017D93B0055AF6B /* StringSanitizing.swift */,
-				D9DDD5D13017D93B0055AF6B /* URLHelpers.swift */,
-			);
-			path = Support;
-			sourceTree = "<group>";
-		};
-		D9DDD5DE3017D93F0055AF6B /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5D63017D93F0055AF6B /* AppSummaryView.swift */,
-				D9DDD5D73017D93F0055AF6B /* ContentView.swift */,
-				D9DDD5D83017D93F0055AF6B /* CredentialSetupSheet.swift */,
-				D9DDD5D93017D93F0055AF6B /* DropTargetView.swift */,
-				D9DDD5DA3017D93F0055AF6B /* OutputSettingsView.swift */,
-				D9DDD5DB3017D93F0055AF6B /* ProgressLogView.swift */,
-				D9DDD5DC3017D93F0055AF6B /* SettingsView.swift */,
-				D9DDD5DD3017D93F0055AF6B /* StageListView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		D9DDD5E83017DAC30055AF6B /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD5E93017DADD0055AF6B /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		D9F473D03017D3DD002D727E = {
-			isa = PBXGroup;
-			children = (
-				D9F473DB3017D3DD002D727E /* DMGBuildNotarize */,
-				D910BBEE3022308700A3A67C /* DMGBuildNotarizeTests */,
-				D9F473DA3017D3DD002D727E /* Products */,
+				D9600191302863690009A836 /* DMGBuildNotarize */,
+				D960019F3028636B0009A836 /* DMGBuildNotarizeTests */,
+				D9600190302863690009A836 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D9F473DA3017D3DD002D727E /* Products */ = {
+		D9600190302863690009A836 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D9F473D93017D3DD002D727E /* DMGBuildNotarize.app */,
-				D910BBED3022308700A3A67C /* DMGBuildNotarizeTests.xctest */,
+				D960018F302863690009A836 /* DMGBuildNotarize.app */,
+				D960019C3028636B0009A836 /* DMGBuildNotarizeTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		D9F473DB3017D3DD002D727E /* DMGBuildNotarize */ = {
-			isa = PBXGroup;
-			children = (
-				D9DDD59F3017D8A80055AF6B /* App */,
-				D9DDD5A13017D8B10055AF6B /* Assets.xcassets */,
-				D9DDD5A43017D8B80055AF6B /* Background */,
-				D9DDD5A73017D8BF0055AF6B /* DesignAssets */,
-				D9DDD5E73017D9440055AF6B /* DMGBuildNotarize.entitlements */,
-				D96CF3473017DBA4006B5197 /* Localizable.strings */,
-				D9DDD5AE3017D8DA0055AF6B /* Model */,
-				D9DDD5E83017DAC30055AF6B /* Preview Content */,
-				D9DDD5C13017D9300055AF6B /* Services */,
-				D9DDD5CC3017D9350055AF6B /* Stores */,
-				D9DDD5D23017D93B0055AF6B /* Support */,
-				D9DDD5DE3017D93F0055AF6B /* Views */,
-			);
-			path = DMGBuildNotarize;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D910BBEC3022308700A3A67C /* DMGBuildNotarizeTests */ = {
+		D960018E302863690009A836 /* DMGBuildNotarize */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D910BBF53022308700A3A67C /* Build configuration list for PBXNativeTarget "DMGBuildNotarizeTests" */;
+			buildConfigurationList = D96001B03028636B0009A836 /* Build configuration list for PBXNativeTarget "DMGBuildNotarize" */;
 			buildPhases = (
-				D910BBE93022308700A3A67C /* Sources */,
-				D910BBEA3022308700A3A67C /* Frameworks */,
-				D910BBEB3022308700A3A67C /* Resources */,
+				D960018B302863690009A836 /* Sources */,
+				D960018C302863690009A836 /* Frameworks */,
+				D960018D302863690009A836 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D910BBF23022308700A3A67C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D910BBEE3022308700A3A67C /* DMGBuildNotarizeTests */,
+				D9600191302863690009A836 /* DMGBuildNotarize */,
 			);
-			name = DMGBuildNotarizeTests;
-			productName = DMGBuildNotarizeTests;
-			productReference = D910BBED3022308700A3A67C /* DMGBuildNotarizeTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
+			name = DMGBuildNotarize;
+			packageProductDependencies = (
+			);
+			productName = DMGBuildNotarize;
+			productReference = D960018F302863690009A836 /* DMGBuildNotarize.app */;
+			productType = "com.apple.product-type.application";
 		};
-		D9F473D83017D3DD002D727E /* DMGBuildNotarize */ = {
+		D960019B3028636B0009A836 /* DMGBuildNotarizeTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D9F473FE3017D3DF002D727E /* Build configuration list for PBXNativeTarget "DMGBuildNotarize" */;
+			buildConfigurationList = D96001B33028636B0009A836 /* Build configuration list for PBXNativeTarget "DMGBuildNotarizeTests" */;
 			buildPhases = (
-				D9F473D53017D3DD002D727E /* Sources */,
-				D9F473D63017D3DD002D727E /* Frameworks */,
-				D9F473D73017D3DD002D727E /* Resources */,
+				D96001983028636B0009A836 /* Sources */,
+				D96001993028636B0009A836 /* Frameworks */,
+				D960019A3028636B0009A836 /* Resources */,
 			);
 			buildRules = (
 			);
-			name = DMGBuildNotarize;
-			productName = DMGBuildNotarize;
-			productReference = D9F473D93017D3DD002D727E /* DMGBuildNotarize.app */;
-			productType = "com.apple.product-type.application";
+			dependencies = (
+				D960019E3028636B0009A836 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D960019F3028636B0009A836 /* DMGBuildNotarizeTests */,
+			);
+			name = DMGBuildNotarizeTests;
+			packageProductDependencies = (
+			);
+			productName = DMGBuildNotarizeTests;
+			productReference = D960019C3028636B0009A836 /* DMGBuildNotarizeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D9F473D13017D3DD002D727E /* Project object */ = {
+		D9600187302863690009A836 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2700;
-				LastUpgradeCheck = 1540;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					D910BBEC3022308700A3A67C = {
-						CreatedOnToolsVersion = 27.0;
-						TestTargetID = D9F473D83017D3DD002D727E;
+					D960018E302863690009A836 = {
+						CreatedOnToolsVersion = 26.3;
 					};
-					D9F473D83017D3DD002D727E = {
-						CreatedOnToolsVersion = 15.4;
+					D960019B3028636B0009A836 = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = D960018E302863690009A836;
 					};
 				};
 			};
-			buildConfigurationList = D9F473D43017D3DD002D727E /* Build configuration list for PBXProject "DMGBuildNotarize" */;
+			buildConfigurationList = D960018A302863690009A836 /* Build configuration list for PBXProject "DMGBuildNotarize" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -308,140 +145,63 @@
 				Base,
 				es,
 			);
-			mainGroup = D9F473D03017D3DD002D727E;
-			preferredProjectObjectVersion = 100;
-			productRefGroup = D9F473DA3017D3DD002D727E /* Products */;
+			mainGroup = D9600186302863690009A836;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D9600190302863690009A836 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D9F473D83017D3DD002D727E /* DMGBuildNotarize */,
-				D910BBEC3022308700A3A67C /* DMGBuildNotarizeTests */,
+				D960018E302863690009A836 /* DMGBuildNotarize */,
+				D960019B3028636B0009A836 /* DMGBuildNotarizeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D910BBEB3022308700A3A67C /* Resources */ = {
+		D960018D302863690009A836 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D9F473D73017D3DD002D727E /* Resources */ = {
+		D960019A3028636B0009A836 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
-				D96CF3493017DBA4006B5197 /* Localizable.strings in Resources */,
-				D9DDD5EA3017DADD0055AF6B /* Preview Assets.xcassets in Resources */,
-				D9DDD5A23017D8B10055AF6B /* Assets.xcassets in Resources */,
-				D9DDD5A83017D8BF0055AF6B /* AppIcon-Source.png in Resources */,
-				D9DDD5A53017D8B80055AF6B /* background.png in Resources */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D910BBE93022308700A3A67C /* Sources */ = {
+		D960018B302863690009A836 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D9F473D53017D3DD002D727E /* Sources */ = {
+		D96001983028636B0009A836 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
-				D9DDD5E63017D93F0055AF6B /* StageListView.swift in Sources */,
-				D9DDD5D43017D93B0055AF6B /* StringSanitizing.swift in Sources */,
-				D9DDD5B33017D8DA0055AF6B /* ValidationReport.swift in Sources */,
-				D9DDD5E03017D93F0055AF6B /* ContentView.swift in Sources */,
-				D9DDD5D53017D93B0055AF6B /* URLHelpers.swift in Sources */,
-				D9DDD5E13017D93F0055AF6B /* CredentialSetupSheet.swift in Sources */,
-				D9DDD5C43017D9300055AF6B /* CredentialSetupService.swift in Sources */,
-				D9DDD5C93017D9300055AF6B /* SigningClient.swift in Sources */,
-				D9DDD5DF3017D93F0055AF6B /* AppSummaryView.swift in Sources */,
-				D9DDD5E33017D93F0055AF6B /* OutputSettingsView.swift in Sources */,
-				D9DDD5B13017D8DA0055AF6B /* PackagingStage.swift in Sources */,
-				D9DDD5C83017D9300055AF6B /* ProcessRunner.swift in Sources */,
-				D9DDD5B23017D8DA0055AF6B /* SigningIdentity.swift in Sources */,
-				D9DDD5C23017D9300055AF6B /* AppleScriptRunner.swift in Sources */,
-				D9DDD5C33017D9300055AF6B /* AppValidator.swift in Sources */,
-				D9DDD5CD3017D9350055AF6B /* AppSettings.swift in Sources */,
-				D9DDD5B53017D91D0055AF6B /* DMGBuildNotarizeApp.swift in Sources */,
-				D9DDD5AF3017D8DA0055AF6B /* AppBundleInfo.swift in Sources */,
-				D9DDD5C53017D9300055AF6B /* DmgBuilder.swift in Sources */,
-				D9DDD5C73017D9300055AF6B /* PackagingPipeline.swift in Sources */,
-				D9DDD5E23017D93F0055AF6B /* DropTargetView.swift in Sources */,
-				D9DDD5CE3017D9350055AF6B /* PackagingController.swift in Sources */,
-				D9DDD5B03017D8DA0055AF6B /* PackagingJob.swift in Sources */,
-				D9DDD5C63017D9300055AF6B /* NotaryClient.swift in Sources */,
-				D9DDD5E43017D93F0055AF6B /* ProgressLogView.swift in Sources */,
-				D9DDD5D33017D93B0055AF6B /* KeychainHelper.swift in Sources */,
-				D9DDD5E53017D93F0055AF6B /* SettingsView.swift in Sources */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D910BBF23022308700A3A67C /* PBXTargetDependency */ = {
+		D960019E3028636B0009A836 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D9F473D83017D3DD002D727E /* DMGBuildNotarize */;
-			targetProxy = D910BBF13022308700A3A67C /* PBXContainerItemProxy */;
+			target = D960018E302863690009A836 /* DMGBuildNotarize */;
+			targetProxy = D960019D3028636B0009A836 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		D96CF3473017DBA4006B5197 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D96CF3483017DBA4006B5197 /* en */,
-				D96CF34A3017DBD8006B5197 /* es */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		D910BBF33022308700A3A67C /* Debug configuration for PBXNativeTarget "DMGBuildNotarizeTests" */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ER43ZD2S4U;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.carbocation.DMGBuildNotarizeTests.DMGBuildNotarizeTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DMGBuildNotarize.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DMGBuildNotarize";
-			};
-			name = Debug;
-		};
-		D910BBF43022308700A3A67C /* Release configuration for PBXNativeTarget "DMGBuildNotarizeTests" */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ER43ZD2S4U;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.carbocation.DMGBuildNotarizeTests.DMGBuildNotarizeTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DMGBuildNotarize.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DMGBuildNotarize";
-			};
-			name = Release;
-		};
-		D9F473FC3017D3DF002D727E /* Debug configuration for PBXProject "DMGBuildNotarize" */ = {
+		D96001AE3028636B0009A836 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -477,6 +237,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ER43ZD2S4U;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -495,7 +256,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -505,7 +266,7 @@
 			};
 			name = Debug;
 		};
-		D9F473FD3017D3DF002D727E /* Release configuration for PBXProject "DMGBuildNotarize" */ = {
+		D96001AF3028636B0009A836 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -541,6 +302,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ER43ZD2S4U;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -553,7 +315,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -561,94 +323,145 @@
 			};
 			name = Release;
 		};
-		D9F473FF3017D3DF002D727E /* Debug configuration for PBXNativeTarget "DMGBuildNotarize" */ = {
+		D96001B13028636B0009A836 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = DMGBuildNotarize/DMGBuildNotarize.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_ASSET_PATHS = "\"DMGBuildNotarize/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = ER43ZD2S4U;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DMGBuildNotarize uses Finder automation to create custom installer window layouts.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "@2026 James Pirruccello";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.1.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.carbocation.DMGBuildNotarize;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = carbocation.DMGBuildNotarize;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		D9F474003017D3DF002D727E /* Release configuration for PBXNativeTarget "DMGBuildNotarize" */ = {
+		D96001B23028636B0009A836 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = DMGBuildNotarize/DMGBuildNotarize.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_ASSET_PATHS = "\"DMGBuildNotarize/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = ER43ZD2S4U;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DMGBuildNotarize uses Finder automation to create custom installer window layouts.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "@2026 James Pirruccello";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.1.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.carbocation.DMGBuildNotarize;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = carbocation.DMGBuildNotarize;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D96001B43028636B0009A836 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ER43ZD2S4U;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = carbocation.DMGBuildNotarizeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DMGBuildNotarize.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DMGBuildNotarize";
+			};
+			name = Debug;
+		};
+		D96001B53028636B0009A836 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ER43ZD2S4U;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = carbocation.DMGBuildNotarizeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DMGBuildNotarize.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DMGBuildNotarize";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D910BBF53022308700A3A67C /* Build configuration list for PBXNativeTarget "DMGBuildNotarizeTests" */ = {
+		D960018A302863690009A836 /* Build configuration list for PBXProject "DMGBuildNotarize" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D910BBF33022308700A3A67C /* Debug configuration for PBXNativeTarget "DMGBuildNotarizeTests" */,
-				D910BBF43022308700A3A67C /* Release configuration for PBXNativeTarget "DMGBuildNotarizeTests" */,
+				D96001AE3028636B0009A836 /* Debug */,
+				D96001AF3028636B0009A836 /* Release */,
 			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D9F473D43017D3DD002D727E /* Build configuration list for PBXProject "DMGBuildNotarize" */ = {
+		D96001B03028636B0009A836 /* Build configuration list for PBXNativeTarget "DMGBuildNotarize" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D9F473FC3017D3DF002D727E /* Debug configuration for PBXProject "DMGBuildNotarize" */,
-				D9F473FD3017D3DF002D727E /* Release configuration for PBXProject "DMGBuildNotarize" */,
+				D96001B13028636B0009A836 /* Debug */,
+				D96001B23028636B0009A836 /* Release */,
 			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D9F473FE3017D3DF002D727E /* Build configuration list for PBXNativeTarget "DMGBuildNotarize" */ = {
+		D96001B33028636B0009A836 /* Build configuration list for PBXNativeTarget "DMGBuildNotarizeTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D9F473FF3017D3DF002D727E /* Debug configuration for PBXNativeTarget "DMGBuildNotarize" */,
-				D9F474003017D3DF002D727E /* Release configuration for PBXNativeTarget "DMGBuildNotarize" */,
+				D96001B43028636B0009A836 /* Debug */,
+				D96001B53028636B0009A836 /* Release */,
 			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D9F473D13017D3DD002D727E /* Project object */;
+	rootObject = D9600187302863690009A836 /* Project object */;
 }
