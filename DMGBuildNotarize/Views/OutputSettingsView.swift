@@ -42,7 +42,7 @@ struct OutputSettingsView: View {
     private func chooseOutput() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.diskImage]
-        panel.nameFieldStringValue = controller.outputURL?.lastPathComponent ?? "Installer.dmg"
+        panel.nameFieldStringValue = controller.outputURL?.lastPathComponent ?? "Image.dmg"
         if let directory = controller.outputURL?.deletingLastPathComponent() {
             panel.directoryURL = directory
         }
