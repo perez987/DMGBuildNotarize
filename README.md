@@ -13,7 +13,7 @@ The main credits for the core code goes to *carbocation* (James Pirruccello), au
 These are my contributions to the project:
 
 - Add DMG styling: implement custom DMG background (include bundled background image asset) with enhanced design of the Finder window
-- Add the preferred option of using `create-dmg`to build the styled Finder window, this is faster, does not require Automation permission, and works reliably across macOS versions; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically.
+- Add the preferred option of using `create-dmg`to build the styled Finder window; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically.
 - Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
 - Update the app icon asset following Apple guidelines
 - Add explicit cancel/exit dismissal behavior to the settings view
