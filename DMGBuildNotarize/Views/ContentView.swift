@@ -33,7 +33,7 @@ struct ContentView: View {
             .padding(.top, 10)
             .background(AppTheme.windowGradient(for: colorScheme))
             .toolbar(removing: .sidebarToggle)
-            .navigationSplitViewColumnWidth(min: 240, ideal: 240, max: 240)
+            .navigationSplitViewColumnWidth(min: 280, ideal: 280, max: 280)
         } detail: {
             VStack(spacing: 0) {
                 HeaderView(controller: controller, settings: settings)

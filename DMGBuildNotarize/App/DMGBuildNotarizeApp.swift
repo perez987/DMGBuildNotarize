@@ -7,7 +7,7 @@ struct DMGBuildNotarizeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(settings: settings)
-                .frame(minWidth: 750, idealWidth: 750, maxWidth: 750, minHeight: 722, idealHeight: 722, maxHeight: 722)
+                .frame(minWidth: 790, idealWidth: 790, maxWidth: 790, minHeight: 722, idealHeight: 722, maxHeight: 722)
         }
         .windowResizability(.contentSize)
 
