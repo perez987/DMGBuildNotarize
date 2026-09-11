@@ -14,12 +14,12 @@ In plain terms: drop in your Mac app, choose where the DMG should go, click **Bu
 
 ## Preface
 
-The main credits for the core code goes to *carbocation* (James Pirruccello), author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
+The main credits for the core code go to *carbocation* (James Pirruccello), author of the source repository [DMGBuildNotarize](https://github.com/carbocation/DMGBuildNotarize).
 
 These are my contributions to the project:
 
 - Add DMG styling: implement custom DMG background (include bundled background image asset) with enhanced design of the Finder window
-- Add the preferred option of using `create-dmg`to build the styled Finder window; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically
+- Add the preferred option of using `create-dmg` to build the styled Finder window; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically
 - Fix Finder Automation in the AppleScript DMG creation mode
 - Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
 - Update the app icon asset following Apple guidelines
