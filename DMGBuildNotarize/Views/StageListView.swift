@@ -27,7 +27,14 @@ struct StageListView: View {
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
+        .frame(height: listHeight)
         .glassCard(colorScheme: colorScheme, cornerRadius: 20, accentOpacity: 0.16)
+    }
+
+    private var listHeight: CGFloat {
+        let rowHeight: CGFloat = 34
+        let verticalInsets: CGFloat = 32
+        return (CGFloat(stages.count) * rowHeight) + verticalInsets
     }
 
     private func symbol(for state: StageState) -> String {

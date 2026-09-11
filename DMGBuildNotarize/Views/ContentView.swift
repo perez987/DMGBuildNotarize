@@ -29,7 +29,8 @@ struct ContentView: View {
                     .padding(.horizontal, 14)
                     .padding(.bottom, 14)
             }
-            .padding(.top, 14)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding(.top, 10)
             .background(AppTheme.windowGradient(for: colorScheme))
             .toolbar(removing: .sidebarToggle)
             .navigationSplitViewColumnWidth(min: 240, ideal: 240, max: 240)
