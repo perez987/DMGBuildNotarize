@@ -76,7 +76,7 @@ The DMG image created by `create-dmg` has an elegant design that I really like a
 
 ### Settings window
 
-Preferences UI and add language selector have been restyled.  Settings and credential setup flows to match the visual treatment of the main window, and adds app-level language selection with restart confirmation. It also expands shipped localizations so the new selector can switch to additional supported languages.
+Preferences UI and language selector have been restyled.  Settings and credential setup flows to match the visual treatment of the main window, and adds app-level language selection with restart confirmation. It also expands shipped localizations so the new selector can switch to additional supported languages.
 
 |     |
 |:---:|
