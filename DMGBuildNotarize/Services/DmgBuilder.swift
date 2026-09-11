@@ -642,7 +642,7 @@ internal struct FinderAutomationAuthorizationError: LocalizedError {
         case .failed(let status):
             return String.localizedStringWithFormat(
                 String(localized: "Finder Automation permission check failed (OSStatus %lld)."),
-                status
+                Int64(status)
             )
         case .authorized:
             return nil

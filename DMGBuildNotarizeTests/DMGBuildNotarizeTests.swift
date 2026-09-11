@@ -405,7 +405,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
     func testFinderAutomationDeniedErrorIsActionable() {
         XCTAssertEqual(
             FinderAutomationAuthorizationError(state: .denied).errorDescription,
-            "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again."
+            String(localized: "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again.")
         )
     }
 
@@ -440,14 +440,17 @@ final class DMGBuildNotarizeTests: XCTestCase {
     func testFinderAutomationUnavailableErrorIsActionable() {
         XCTAssertEqual(
             FinderAutomationAuthorizationError(state: .targetNotAccessible).errorDescription,
-            "Finder is not currently available for Automation. Try again after Finder finishes launching."
+            String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
         )
     }
 
     func testFinderAutomationGenericFailureIncludesStatus() {
         XCTAssertEqual(
             FinderAutomationAuthorizationError(state: .failed(-50)).errorDescription,
-            "Finder Automation permission check failed (OSStatus -50)."
+            String.localizedStringWithFormat(
+                String(localized: "Finder Automation permission check failed (OSStatus %lld)."),
+                Int64(-50)
+            )
         )
     }
 
@@ -470,7 +473,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
         let sequence = PermissionSequence(states: [.targetNotRunning, .notDetermined, .authorized])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
-                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                await MainActor.run {
+                    sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                }
             },
             finderLauncher: {
                 await sequence.launchFinder()
@@ -488,7 +493,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
         let sequence = PermissionSequence(states: [.notDetermined, .notDetermined])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
-                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                await MainActor.run {
+                    sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                }
             }
         )
 
@@ -503,7 +510,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
         let sequence = PermissionSequence(states: [.targetNotRunning, .targetNotRunning])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
-                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                await MainActor.run {
+                    sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                }
             },
             finderLauncher: {
                 await sequence.launchFinder()
@@ -516,7 +525,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
         } catch {
             XCTAssertEqual(
                 error.localizedDescription,
-                "Finder is not currently available for Automation. Try again after Finder finishes launching."
+                String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
             )
         }
     }
@@ -526,7 +535,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
         let sequence = PermissionSequence(states: [.targetNotRunning])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
-                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                await MainActor.run {
+                    sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+                }
             },
             finderLauncher: {
                 await sequence.launchFinder(result: false)
@@ -539,7 +550,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
         } catch {
             XCTAssertEqual(
                 error.localizedDescription,
-                "Finder is not currently available for Automation. Try again after Finder finishes launching."
+                String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
             )
         }
     }
@@ -575,7 +586,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
         } catch {
             XCTAssertEqual(
                 error.localizedDescription,
-                "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again."
+                String(localized: "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again.")
             )
         }
     }
