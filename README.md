@@ -30,7 +30,7 @@ These are my contributions to the project:
 - Add language system with language selector, integrated in Settings view
 - Polish preferences UI and add in-app language selection with restart confirmation.
 
-**Note**: The first time you run the application in AppleScript mode, a prompt appears informing the user that "DMGBuildNotarize uses Finder automation to create custom installer window layouts" and asking for permission to allow DMGBuildNotarize to send Apple Events to Finder. You must grant this permission for the DMG to be created correctly. This is not necessary if the DMG is created in create-dmg mode.
+**Note**: The first time you run the application in AppleScript mode, a prompt informs to the user that "DMGBuildNotarize uses Finder automation to create custom installer window layouts" and asking for permission to allow DMGBuildNotarize to send Apple Events to Finder. You must grant this permission for the DMG to be created correctly. This is not necessary if the DMG is created in create-dmg mode.
 
 ## Add-on: create-dmg
 
