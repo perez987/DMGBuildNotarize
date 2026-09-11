@@ -1,11 +1,15 @@
 import SwiftUI
 
 struct AppSummaryView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let info: AppBundleInfo?
     let report: ValidationReport?
 
     var body: some View {
-        GroupBox("") {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(String(localized: "App"))
+                .font(.headline.weight(.semibold))
+
             if let info {
                 Grid(alignment: .leading, horizontalSpacing: 18, verticalSpacing: 8) {
                     SummaryRow("Name", info.displayName)
@@ -27,6 +31,8 @@ struct AppSummaryView: View {
                 .frame(maxWidth: .infinity, minHeight: 130)
             }
         }
+        .padding(16)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 20, accentOpacity: 0.18)
     }
 }
 
@@ -50,4 +56,3 @@ private struct SummaryRow: View {
         }
     }
 }
-

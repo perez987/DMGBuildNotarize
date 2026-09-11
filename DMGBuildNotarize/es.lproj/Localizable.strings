@@ -16,7 +16,7 @@
 
 /* DropTargetView */
 "Inspecting App" = "Inspeccionando App";
-"Drop Signed App" = "Suelta aquí una Aplicación firmada";
+"Drop Signed App" = "Suelta aquí una App firmada";
 ".app bundle" = "(.app)";
 
 /* AppSummaryView */
@@ -42,58 +42,79 @@
 "Log" = "Registro";
 "Create %@ Profile" = "Crear perfil %@";
 "Command output will appear here." = "La salida del comando aparecerá aquí.";
+"Warning" = "Advertencia";
+
+/* Finder Automation */
+"DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again." = "DMGBuildNotarize necesita permiso de Automatización para Finder para aplicar el diseño de la ventana del DMG. Permite el acceso a Finder cuando se te solicite, o habilita DMGBuildNotarize en Ajustes del Sistema > Privacidad y seguridad > Automatización, y vuelve a intentarlo.";
+"Finder is not currently available for Automation. Try again after Finder finishes launching." = "Finder no está disponible actualmente para la Automatización. Vuelve a intentarlo cuando Finder haya terminado de iniciarse.";
+"Finder Automation permission check failed (OSStatus %lld)." = "La comprobación del permiso de Automatización de Finder falló (OSStatus %lld).";
 
 /* SettingsView */
+"Settings" = "Ajustes";
+"Manage signing, notarization, language, and output preferences." = "Administra las preferencias de firma, notarización, idioma y destino.";
 "Signing" = "Firma";
+"Choose the Developer ID Application identity used for the finished DMG." = "Elige la identidad Developer ID Application que se usará para el DMG final.";
 "Identity" = "Identidad";
 "No Developer ID Application identities" = "No hay identidades Developer ID Application";
 "Refresh" = "Actualizar";
 "Notarization" = "Notarización";
+"Save or validate the keychain profile used for notarization submissions." = "Guarda o valida el perfil del Llavero usado para enviar la notarización.";
 "Keychain Profile" = "Perfil del Llavero";
 "Create or Validate Profile" = "Crear o Validar Perfil";
+"Language" = "Idioma";
+"Select the display language used after the next app restart." = "Elige el idioma de la interfaz que se usará tras reiniciar la app.";
+"Selected language" = "Idioma seleccionado";
+"Output Folder" = "Carpeta de destino";
+"Choose where new DMGs are created by default." = "Elige dónde se crearán por defecto los nuevos DMG.";
 "Choose Default Output Folder" = "Elegir Carpeta Destino Predeterminada";
+"Choose Folder" = "Elegir Carpeta";
+"Close" = "Cerrar";
+"Restart required" = "Reinicio necesario";
+"Change Language" = "Cambiar idioma";
+"DMGBuildNotarize needs to restart before %@ is applied. Do you want to continue?" = "DMGBuildNotarize debe reiniciarse antes de aplicar %@. ¿Quieres continuar?";
 
 /* CredentialSetupSheet — header */
 "Notary Profile" = "Perfil de Notarización";
-"Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain." = "La notarización usa credenciales de App Store Connect. DMGBuildNotarize pide a la herramienta de Apple que las valide y guarda un perfil con nombre en el Llavero.";
+"Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain." = "La notarización usa credenciales de App Store Connect. DMGBuildNotarize pide a la herramienta de Apple que las valide y guarde un perfil con nombre en el Llavero.";
 "Xcode-managed signing certificates do not include a reusable notarization login for third-party apps." = "Los certificados de firma gestionados por Xcode no incluyen un inicio de sesión de notarización reutilizable para apps de terceros.";
 
 /* CredentialSetupSheet — form */
 "Profile" = "Perfil";
-"Profile Name" = "Nombre";
+"Profile Name" = "Nombre del perfil";
 "Credentials" = "Credenciales";
 "Method" = "Método";
 
 /* CredentialSetupSheet — API key fields */
 "Team API Key" = "Clave API del equipo";
-"Private Key" = "Clave Privada";
+"Private Key" = "Clave privada";
 "Choose .p8 key" = "Elegir clave .p8";
-"Key ID" = "ID de Clave";
-"Issuer ID" = "ID de Emisor";
-"Issuer ID from Team Keys" = "ID de Emisor de Claves del Equipo";
-"Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization." = "Encuéntralo en App Store Connect en Users and Access > Integrations > App Store Connect API > Team Keys. Es el Issuer ID for the team, no lel Key ID, y las claves API individuales no funcionan con la notarización.";
-"If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password." = "Si tu equipo no puede crear otra Clave API del equipo, usa el método de Apple ID con una contraseña específica de la app.";
-"Open App Store Connect API Keys" = "Abrir Claves API de App Store Connect";
-"Choose API Private Key" = "Elegir Clave API Privada";
+"Choose Key" = "Elegir clave";
+"Key ID" = "ID de la clave";
+"Issuer ID" = "ID del emisor";
+"Issuer ID from Team Keys" = "ID del emisor de las claves del equipo";
+"Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization." = "Encuéntralo en App Store Connect, en Users and Access > Integrations > App Store Connect API > Team Keys. Es el Issuer ID del equipo, no el Key ID, y las claves API individuales no funcionan con la notarización.";
+"If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password." = "Si tu equipo no puede crear otra clave API del equipo, usa el método de Apple ID con una contraseña específica de la app.";
+"Open App Store Connect API Keys" = "Abrir las claves API de App Store Connect";
+"Choose API Private Key" = "Elegir clave API privada";
 
 /* CredentialSetupSheet — Apple ID fields */
 "Apple ID" = "Apple ID";
-"Team ID" = "ID de Equipo";
+"Team ID" = "ID del equipo";
 "Password" = "Contraseña";
 "App-specific password" = "Contraseña específica de la app";
-"Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Genérala en account.apple.com en Sign-In and Security > App-Specific Passwords. Tu cuenta de Apple debe tener la autenticación de dos factores activada.";
-"Open Apple Account Passwords" = "Contraseñas de la Cuenta Apple";
+"Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Genérala en account.apple.com, en Sign-In and Security > App-Specific Passwords. Tu cuenta de Apple debe tener activada la autenticación de dos factores.";
+"Open Apple Account Passwords" = "Abrir contraseñas de la cuenta Apple";
 "Use %@" = "Usar %@";
 
 /* CredentialSetupSheet — actions */
-"Store & Validate" = "Guardar y Validar";
+"Store & Validate" = "Guardar y validar";
 
 /* PackagingStage titles — AppleScript path */
 "Validate app" = "Validar app";
 "Validate notary profile" = "Validar perfil de notarización";
 "Stage installer" = "Preparar instalador";
 "Create writable DMG" = "Crear DMG editable";
-"Apply Finder layout" = "Aplicar diseño al Finder";
+"Apply Finder layout" = "Aplicar diseño del Finder";
 "Compress DMG" = "Comprimir DMG";
 
 /* PackagingStage titles — create-dmg path (Build DMG key shared with toolbar button above) */
@@ -101,4 +122,3 @@
 "Notarize" = "Notarizar";
 "Staple ticket" = "Adjuntar ticket";
 "Verify" = "Verificar";
-

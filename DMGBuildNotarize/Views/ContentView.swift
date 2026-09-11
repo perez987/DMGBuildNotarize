@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 struct ContentView: View {
     @ObservedObject var settings: AppSettings
+    @Environment(\.colorScheme) private var colorScheme
     @StateObject private var controller: PackagingController
     @State private var showReplaceConfirmation = false
     @State private var showCredentialSetup = false
@@ -19,19 +20,26 @@ struct ContentView: View {
                 DropTargetView(isInspecting: controller.isInspectingApp) { url in
                     Task { await controller.selectApp(url: url) }
                 }
-                .padding()
+                .padding(14)
 
-                Divider()
+//                Divider()
+//                    .overlay(colorScheme == .dark ? .white.opacity(0.12) : .white.opacity(0.36))
 
                 StageListView(stages: controller.stageProgress)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 14)
             }
-            .navigationSplitViewColumnWidth(min: 280, ideal: 280, max: 280)
+            .padding(.top, 14)
+            .background(AppTheme.windowGradient(for: colorScheme))
+            .toolbar(removing: .sidebarToggle)
+            .navigationSplitViewColumnWidth(min: 240, ideal: 240, max: 240)
         } detail: {
             VStack(spacing: 0) {
                 HeaderView(controller: controller, settings: settings)
-                    .padding()
+                    .padding(14)
 
                 Divider()
+                    .overlay(colorScheme == .dark ? .white.opacity(0.12) : .white.opacity(0.36))
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
@@ -46,16 +54,19 @@ struct ContentView: View {
                             showCredentialSetup = true
                         }
                     }
-                    .padding()
+                    .padding(14)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
+            .navigationSplitViewStyle(.balanced)
+            .background(AppTheme.windowGradient(for: colorScheme))
             .toolbar {
                 ToolbarItemGroup {
                     Button {
                         chooseApp()
                     } label: {
                         Label("Choose App", systemImage: "app.badge")
+                            .font(.system(size: 21))
                     }
                     .help("Choose App")
 
@@ -63,6 +74,7 @@ struct ContentView: View {
                         startBuild()
                     } label: {
                         Label("Build DMG", systemImage: "shippingbox")
+                            .font(.system(size: 21))
                     }
                     .keyboardShortcut(.return, modifiers: [.command])
                     .disabled(!controller.canBuild)
@@ -70,6 +82,7 @@ struct ContentView: View {
                 }
             }
         }
+        .background(AppTheme.windowGradient(for: colorScheme))
         .task {
             await settings.refreshSigningIdentities()
         }
@@ -115,13 +128,19 @@ struct ContentView: View {
 private struct HeaderView: View {
     let controller: PackagingController
     let settings: AppSettings
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         HStack(alignment: .center, spacing: 14) {
             Image(systemName: "opticaldiscdrive")
                 .font(.system(size: 32))
-                .foregroundStyle(Color.accentColor)
-                .frame(width: 44, height: 44)
+                .foregroundStyle(AppTheme.accentGradient)
+                .frame(width: 48, height: 48)
+                .background {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(AppTheme.accentGradient)
+                        .opacity(colorScheme == .dark ? 0.2 : 0.22)
+                }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(controller.selectedAppInfo?.displayName ?? "DMGBuildNotarize")
@@ -140,6 +159,9 @@ private struct HeaderView: View {
                     .controlSize(.small)
             }
         }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 20, accentOpacity: 0.2)
     }
 
     @MainActor private var statusText: String {

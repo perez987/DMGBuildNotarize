@@ -4,7 +4,13 @@ DMGBuildNotarize is a simple Mac app that turns a signed `.app` bundle into a po
 
 In plain terms: drop in your Mac app, choose where the DMG should go, click **Build DMG**, and let the app run the packaging and Apple notarization steps for you.
 
-![Main window](Images/Main-window.png)
+| Using AppleScript |
+|:----|
+| ![Main window](Images/Window-applescript.png) |
+
+| Using create-dmg |
+|:----|
+| ![Main window](Images/Window-createdmg.png) |
 
 ## Preface
 
@@ -13,11 +19,18 @@ The main credits for the core code goes to *carbocation* (James Pirruccello), au
 These are my contributions to the project:
 
 - Add DMG styling: implement custom DMG background (include bundled background image asset) with enhanced design of the Finder window
-- Add the preferred option of using `create-dmg`to build the styled Finder window; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically.
+- Add the preferred option of using `create-dmg`to build the styled Finder window; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically
+- Fix Finder Automation in the AppleScript DMG creation mode
 - Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
 - Update the app icon asset following Apple guidelines
 - Add explicit cancel/exit dismissal behavior to the settings view
-- Improve workflow messaging with concise status updates.
+- Improve workflow messaging with concise status updates
+- Refresh SwiftUI glass styling and Dark Mode readability
+- Integrate error icon and text into log messages
+- Add language system with language selector, integrated in Settings view
+- Polish preferences UI and add in-app language selection with restart confirmation.
+
+**Note**: The first time you run the application in AppleScript mode, a prompt appears informing the user that "DMGBuildNotarize uses Finder automation to create custom installer window layouts" and asking for permission to allow DMGBuildNotarize to send Apple Events to Finder. You must grant this permission for the DMG to be created correctly. This is not necessary if the DMG is created in create-dmg mode.
 
 ## Add-on: create-dmg
 
@@ -60,6 +73,15 @@ The DMG image created by `create-dmg` has an elegant design that I really like a
 |     |
 |:---:|
 | ![DMG window](Images/DMG-window.png) |
+
+### Settings window
+
+Preferences UI and add language selector have been restyled.  Settings and credential setup flows to match the visual treatment of the main window, and adds app-level language selection with restart confirmation. It also expands shipped localizations so the new selector can switch to additional supported languages.
+
+|     |
+|:---:|
+| ![Settings window](Images/Settings.png) |
+
 
 ---
 

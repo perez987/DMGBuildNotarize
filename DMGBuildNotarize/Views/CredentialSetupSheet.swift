@@ -1,5 +1,5 @@
-import AppKit
 import SwiftUI
+import AppKit
 import UniformTypeIdentifiers
 
 struct CredentialSetupSheet: View {
@@ -7,6 +7,7 @@ struct CredentialSetupSheet: View {
     let onCompleted: (String) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     @State private var profileName: String
     @State private var mode: CredentialSetupMode = .appleID
     @State private var privateKeyPath = ""
@@ -34,53 +35,94 @@ struct CredentialSetupSheet: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Notary Profile")
-                    .font(.title3.weight(.semibold))
+        ZStack {
+            AppTheme.windowGradient(for: colorScheme)
+                .ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    headerCard
+                    profileCard
+                    credentialsCard
+
+                    if let errorMessage {
+                        errorCard(errorMessage)
+                    }
+
+                    actionsCard
+                }
+                .padding(20)
+            }
+        }
+        .frame(width: 620)
+        .frame(minHeight: 640)
+    }
+
+    private var headerCard: some View {
+        PreferenceCard(accentOpacity: 0.24) {
+            VStack(alignment: .leading, spacing: 8) {
+                PreferenceSectionHeader("Notary Profile", systemImage: "key.horizontal.fill")
+
                 Text("Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+
                 Text("Xcode-managed signing certificates do not include a reusable notarization login for third-party apps.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+        }
+    }
 
-            Form {
-                Section("Profile") {
-                    TextField("Profile Name", text: $profileName)
-                }
+    private var profileCard: some View {
+        PreferenceCard {
+            PreferenceSectionHeader("Profile", systemImage: "person.text.rectangle")
 
-                Section("Credentials") {
-                    Picker("Method", selection: $mode) {
-                        ForEach(CredentialSetupMode.allCases) { method in
-                            Text(method.title).tag(method)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-
-                    switch mode {
-                    case .apiKey:
-                        apiKeyFields
-                    case .appleID:
-                        appleIDFields
-                    }
-                }
+            PreferenceField("Profile Name") {
+                TextField("Profile Name", text: $profileName)
+                    .textFieldStyle(.roundedBorder)
             }
-            .formStyle(.grouped)
+        }
+    }
 
-            if let errorMessage {
-                Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
-                    .font(.body)
-                    .foregroundStyle(.red)
-                    .textSelection(.enabled)
+    private var credentialsCard: some View {
+        PreferenceCard {
+            PreferenceSectionHeader("Credentials", systemImage: "lock.shield")
+
+            PreferenceField("Method") {
+                Picker("Method", selection: $mode) {
+                    ForEach(CredentialSetupMode.allCases) { method in
+                        Text(method.title).tag(method)
+                    }
+                }
+                .pickerStyle(.segmented)
             }
 
+            switch mode {
+            case .apiKey:
+                apiKeyFields
+            case .appleID:
+                appleIDFields
+            }
+        }
+    }
+
+    private func errorCard(_ errorMessage: String) -> some View {
+        PreferenceCard(accentOpacity: 0.12) {
+            Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
+                .font(.body)
+                .foregroundStyle(.red)
+                .textSelection(.enabled)
+        }
+    }
+
+    private var actionsCard: some View {
+        PreferenceCard(accentOpacity: 0.12) {
             HStack {
                 Spacer()
 
-                Button("Cancel", role: .cancel) {
+                Button(String(localized: "Cancel"), role: .cancel) {
                     dismiss()
                 }
                 .disabled(isRunning)
@@ -99,48 +141,41 @@ struct CredentialSetupSheet: View {
                 .disabled(!canSubmit || isRunning)
             }
         }
-        .padding()
-        .frame(width: 560, height: 572)
     }
 
     private var apiKeyFields: some View {
-        Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 10) {
-            GridRow {
-                Text("Private Key")
-                    .foregroundStyle(.secondary)
-
-                HStack {
-                    Text(privateKeyPath.isEmpty ? "Choose .p8 key" : privateKeyPath)
+        VStack(alignment: .leading, spacing: 14) {
+            PreferenceField("Private Key") {
+                HStack(spacing: 12) {
+                    Text(privateKeyPath.isEmpty ? String(localized: "Choose .p8 key") : privateKeyPath)
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .textSelection(.enabled)
 
-                    Spacer()
+                    Spacer(minLength: 12)
 
                     Button {
                         choosePrivateKey()
                     } label: {
-                        Image(systemName: "folder")
+                        Label("Choose Key", systemImage: "folder")
                     }
+                    .buttonStyle(.bordered)
                     .help("Choose API Private Key")
                 }
             }
 
-            GridRow {
-                Text("Key ID")
-                    .foregroundStyle(.secondary)
-                TextField("", text: $keyID)
+            PreferenceField("Key ID") {
+                TextField("Key ID", text: $keyID)
+                    .textFieldStyle(.roundedBorder)
             }
 
-            GridRow {
-                Text("Issuer ID")
-                    .foregroundStyle(.secondary)
-                TextField("", text: $issuerID)
+            PreferenceField("Issuer ID") {
+                TextField("Issuer ID", text: $issuerID)
+                    .textFieldStyle(.roundedBorder)
             }
 
-            GridRow {
-                Text("")
-                VStack(alignment: .leading, spacing: 8) {
+            PreferenceField("Issuer ID from Team Keys") {
+                VStack(alignment: .leading, spacing: 10) {
                     Text("Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -156,43 +191,41 @@ struct CredentialSetupSheet: View {
                     } label: {
                         Label("Open App Store Connect API Keys", systemImage: "arrow.up.forward.app")
                     }
-                    Spacer()
+                    .buttonStyle(.bordered)
                 }
             }
         }
     }
 
     private var appleIDFields: some View {
-        Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 10) {
-            GridRow {
-                Text("Apple ID")
-                    .foregroundStyle(.secondary)
-                TextField("", text: $appleID)
+        VStack(alignment: .leading, spacing: 14) {
+            PreferenceField("Apple ID") {
+                TextField("Apple ID", text: $appleID)
+                    .textFieldStyle(.roundedBorder)
             }
 
-            GridRow {
-                Text("Team ID")
-                    .foregroundStyle(.secondary)
-                HStack {
-                    TextField("", text: $teamID)
+            PreferenceField("Team ID") {
+                HStack(spacing: 10) {
+                    TextField("Team ID", text: $teamID)
+                        .textFieldStyle(.roundedBorder)
 
                     if let inferredTeamID = settings.selectedSigningIdentity?.teamID {
-                        Button("Use \(inferredTeamID)") {
+                        Button(String(format: String(localized: "Use %@"), inferredTeamID)) {
                             teamID = inferredTeamID
                         }
+                        .buttonStyle(.bordered)
                         .disabled(teamID == inferredTeamID)
                     }
                 }
             }
 
-            GridRow {
-                Text("App-specific password")
-                    .foregroundStyle(.secondary)
-                SecureField("", text: appSpecificPasswordBinding)
+            PreferenceField("App-specific password") {
+                SecureField("App-specific password", text: appSpecificPasswordBinding)
+                    .textFieldStyle(.roundedBorder)
             }
 
-            GridRow {
-                VStack(alignment: .leading, spacing: 8) {
+            PreferenceField("Password") {
+                VStack(alignment: .leading, spacing: 10) {
                     Text("Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -203,8 +236,8 @@ struct CredentialSetupSheet: View {
                     } label: {
                         Label("Open Apple Account Passwords", systemImage: "arrow.up.forward.app")
                     }
+                    .buttonStyle(.bordered)
                 }
-                .gridCellColumns(2)
             }
         }
     }

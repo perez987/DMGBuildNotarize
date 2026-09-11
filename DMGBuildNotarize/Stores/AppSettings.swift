@@ -73,6 +73,18 @@ final class AppSettings: ObservableObject {
         signingIdentities.first { $0.hash == signingIdentityHash }
     }
 
+    var selectedAppLanguageCode: String {
+        let storedCode = defaults.stringArray(forKey: Keys.appleLanguages)?.first
+            ?? Locale.current.language.languageCode?.identifier
+            ?? AppLanguage.defaultLanguage.code
+        return AppLanguage.resolve(code: storedCode).code
+    }
+
+    func setSelectedAppLanguageCode(_ code: String) {
+        defaults.set([AppLanguage.resolve(code: code).code], forKey: Keys.appleLanguages)
+        objectWillChange.send()
+    }
+
     func refreshSigningIdentities() async {
         isLoadingIdentities = true
         identityLoadError = nil
@@ -101,5 +113,6 @@ final class AppSettings: ObservableObject {
         static let savedNotaryIssuerID = "savedNotaryIssuerID"
         static let savedNotaryPrivateKeyPath = "savedNotaryPrivateKeyPath"
         static let savedNotaryAppSpecificPassword = "notaryAppSpecificPassword"
+        static let appleLanguages = "AppleLanguages"
     }
 }

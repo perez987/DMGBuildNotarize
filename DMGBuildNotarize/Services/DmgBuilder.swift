@@ -1,4 +1,5 @@
 import AppKit
+import ApplicationServices
 import Foundation
 
 struct DmgBuildContext: Equatable {
@@ -42,15 +43,18 @@ struct DmgBuilder: @unchecked Sendable {
 
     let runner: any ProcessRunning
     let scriptRunner: any AppleScriptRunning
+    let automationAuthorizer: any FinderAutomationAuthorizing
     nonisolated(unsafe) let fileManager: FileManager
 
     nonisolated init(
         runner: any ProcessRunning = ProcessRunner(),
         scriptRunner: any AppleScriptRunning = DefaultAppleScriptRunner(),
+        automationAuthorizer: any FinderAutomationAuthorizing = DefaultFinderAutomationAuthorizer(),
         fileManager: FileManager = .default
     ) {
         self.runner = runner
         self.scriptRunner = scriptRunner
+        self.automationAuthorizer = automationAuthorizer
         self.fileManager = fileManager
     }
 
@@ -120,12 +124,12 @@ struct DmgBuilder: @unchecked Sendable {
         // treated as a foreground caller.
         await activateCurrentApplication()
 
-        // Probe Finder automation using NSAppleScript so that Apple Events are
-        // sent from DMGBuildNotarize (which holds the user-granted Automation
-        // permission) rather than from a subsidiary osascript child process that
-        // may not share that permission. This surfaces any Automation denial as
-        // a clear error before the volume is mounted.
-        try await scriptRunner.execute(finderPermissionProbeScript())
+        // Ask TCC for Finder Automation permission before mounting the volume.
+        // This keeps the permission prompt strictly on the AppleScript path and
+        // avoids starting the DMG layout work until the app process has a
+        // resolved Automation decision for Finder.
+        try await automationAuthorizer.requestPermission()
+        try await preflightFinderAutomation()
 
         do {
             try await runner.run(
@@ -260,16 +264,32 @@ struct DmgBuilder: @unchecked Sendable {
         onOutput("Finder layout persisted to .DS_Store.")
     }
 
+    private func preflightFinderAutomation() async throws {
+        do {
+            try await scriptRunner.execute(finderPermissionProbeScript())
+        } catch {
+            throw mapFinderAutomationError(error)
+        }
+    }
+
     private func finderPermissionProbeScript() -> String {
-        // A trivial read-only query that will fail with an Automation denied
-        // error (-1743) if DMGBuildNotarize does not have permission to control
-        // Finder. Because we run this via NSAppleScript in our own process, the
-        // TCC check is against DMGBuildNotarize—the app the user sees in System
-        // Settings › Privacy & Security › Automation—not against a subsidiary
-        // osascript child process.
         """
         tell application "Finder" to name
         """
+    }
+
+    private func mapFinderAutomationError(_ error: Error) -> Error {
+        let nsError = error as NSError
+        switch nsError.code {
+        case Int(errAEEventWouldRequireUserConsent):
+            return FinderAutomationAuthorizationError(state: .notDetermined)
+        case Int(errAEEventNotPermitted), Int(errAEPrivilegeError), Int(userCanceledErr):
+            return FinderAutomationAuthorizationError(state: .denied)
+        case Int(procNotFound), Int(errAETimeout), Int(errAETargetAddressNotPermitted):
+            return FinderAutomationAuthorizationError(state: .targetNotAccessible)
+        default:
+            return error
+        }
     }
 
     private func finderLayoutScript(appName: String, mountPath: String) -> String {
@@ -462,6 +482,173 @@ struct DmgBuilder: @unchecked Sendable {
 }
 
 private final class BundleLocator {}
+
+protocol FinderAutomationAuthorizing: Sendable {
+    func requestPermission() async throws
+}
+
+struct DefaultFinderAutomationAuthorizer: FinderAutomationAuthorizing {
+    typealias PermissionResolver = @Sendable (_ askUserIfNeeded: Bool) async -> FinderAutomationAuthorizationState
+    typealias FinderLauncher = @Sendable () async -> Bool
+
+    private static let finderBundleIdentifier = "com.apple.finder"
+    private let permissionResolver: PermissionResolver
+    private let finderLauncher: FinderLauncher
+
+    nonisolated init(
+        permissionResolver: @escaping PermissionResolver = { askUserIfNeeded in
+            await MainActor.run {
+                Self.permissionState(askUserIfNeeded: askUserIfNeeded)
+            }
+        },
+        finderLauncher: @escaping FinderLauncher = {
+            await Self.launchFinderIfNeeded()
+        }
+    ) {
+        self.permissionResolver = permissionResolver
+        self.finderLauncher = finderLauncher
+    }
+
+    func requestPermission() async throws {
+        var currentState = await permissionResolver(false)
+        if currentState == .targetNotRunning {
+            guard await finderLauncher() else {
+                throw FinderAutomationAuthorizationError(state: .targetNotAccessible)
+            }
+            currentState = await permissionResolver(false)
+            if currentState == .targetNotRunning {
+                currentState = .targetNotAccessible
+            }
+        }
+
+        switch currentState {
+        case .authorized:
+            return
+        case .notDetermined:
+            let promptedState = await permissionResolver(true)
+            if promptedState == .authorized || promptedState == .notDetermined {
+                return
+            }
+            throw FinderAutomationAuthorizationError(state: promptedState)
+        default:
+            throw FinderAutomationAuthorizationError(state: currentState)
+        }
+    }
+
+    private static func permissionState(askUserIfNeeded: Bool) -> FinderAutomationAuthorizationState {
+        var target = AEAddressDesc()
+        let createStatus = finderBundleIdentifier.withCString { bundleIdentifier in
+            AECreateDesc(
+                typeApplicationBundleID,
+                bundleIdentifier,
+                finderBundleIdentifier.utf8.count,
+                &target
+            )
+        }
+        guard createStatus == noErr else {
+            return .failed(OSStatus(createStatus))
+        }
+        defer { AEDisposeDesc(&target) }
+
+        let status = AEDeterminePermissionToAutomateTarget(
+            &target,
+            AEEventClass(kCoreEventClass),
+            AEEventID(kAEGetData),
+            askUserIfNeeded
+        )
+        return FinderAutomationAuthorizationState(status: status)
+    }
+
+    private static func launchFinderIfNeeded() async -> Bool {
+        if await isFinderRunning() {
+            return true
+        }
+        let launched = await launchFinderApplication()
+        guard launched else { return false }
+
+        return await waitForFinderToLaunch()
+    }
+
+    private static func waitForFinderToLaunch() async -> Bool {
+        let clock = ContinuousClock()
+        let deadline = clock.now.advanced(by: .seconds(5))
+        while !(await isFinderRunning()) {
+            guard clock.now < deadline else { return false }
+            try? await Task.sleep(for: .milliseconds(200))
+        }
+        return true
+    }
+
+    private static func isFinderRunning() async -> Bool {
+        await MainActor.run {
+            !NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").isEmpty
+        }
+    }
+
+    @MainActor
+    private static func launchFinderApplication() async -> Bool {
+        guard let finderURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.finder") else {
+            return false
+        }
+
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = false
+        configuration.addsToRecentItems = false
+        return await withCheckedContinuation { continuation in
+            NSWorkspace.shared.openApplication(at: finderURL, configuration: configuration) { application, error in
+                continuation.resume(returning: application != nil && error == nil)
+            }
+        }
+    }
+}
+
+internal enum FinderAutomationAuthorizationState: Equatable {
+    case authorized
+    case notDetermined
+    case denied
+    case targetNotRunning
+    case targetNotAccessible
+    case failed(OSStatus)
+
+    init(status: OSStatus) {
+        switch status {
+        case noErr:
+            self = .authorized
+        case OSStatus(errAEEventWouldRequireUserConsent):
+            self = .notDetermined
+        case OSStatus(errAEEventNotPermitted), OSStatus(errAEPrivilegeError), OSStatus(userCanceledErr):
+            self = .denied
+        case OSStatus(procNotFound):
+            self = .targetNotRunning
+        case OSStatus(errAETimeout):
+            self = .targetNotAccessible
+        case OSStatus(errAETargetAddressNotPermitted):
+            self = .targetNotAccessible
+        default:
+            self = .failed(status)
+        }
+    }
+}
+
+internal struct FinderAutomationAuthorizationError: LocalizedError {
+    let state: FinderAutomationAuthorizationState
+
+    var errorDescription: String? {
+        switch state {
+        case .denied, .notDetermined:
+            return String(localized: "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again.")
+        case .targetNotRunning, .targetNotAccessible:
+            return String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
+        case .failed(let status):
+            return String.localizedStringWithFormat(
+                String(localized: "Finder Automation permission check failed (OSStatus %lld)."),
+                status
+            )
+        case .authorized:
+            return nil
+        }
+    }
+}
 
 #if DEBUG
 extension DmgBuilder {

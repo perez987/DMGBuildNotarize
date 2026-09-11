@@ -1,0 +1,118 @@
+/* ContentView — toolbar */
+"Choose App" = "App auswählen";
+"Build DMG" = "DMG erstellen";
+
+/* ContentView — replace-DMG alert */
+"Replace existing DMG?" = "Vorhandene DMG ersetzen?";
+"Replace" = "Ersetzen";
+"Cancel" = "Abbrechen";
+
+/* HeaderView — status bar */
+"Packaging and notarizing" = "Paket wird erstellt und notarisiert";
+"Ready: %@" = "Bereit: %@";
+"Choose a Developer ID Application identity in Settings" = "Wähle in den Einstellungen eine Developer ID Application-Identität";
+"App signature verified" = "App-Signatur verifiziert";
+"Drop a signed .app to begin" = "Lege zum Start eine signierte .app-Datei ab";
+
+/* DropTargetView */
+"Inspecting App" = "App wird geprüft";
+"Drop Signed App" = "Signierte App ablegen";
+".app bundle" = ".app-Bundle";
+
+/* AppSummaryView */
+"App" = "App";
+"No App Selected" = "Keine App ausgewählt";
+"Name" = "Name";
+"Bundle ID" = "Bundle-ID";
+"Version" = "Version";
+"Executable" = "Ausführbare Datei";
+"Signature" = "Signatur";
+"Checking" = "Wird geprüft";
+"Developer ID ready" = "Developer ID bereit";
+
+/* OutputSettingsView */
+"DMG" = "DMG";
+"Volume" = "Volume";
+"Output" = "Ausgabe";
+"Volume name" = "Volumename";
+"Choose output" = "Ausgabe wählen";
+"Choose Output" = "Ausgabe wählen";
+
+/* ProgressLogView */
+"Log" = "Protokoll";
+"Create %@ Profile" = "%@-Profil erstellen";
+"Command output will appear here." = "Die Befehlsausgabe erscheint hier.";
+
+/* SettingsView */
+"Settings" = "Einstellungen";
+"Manage signing, notarization, language, and output preferences." = "Verwalte die Einstellungen für Signierung, Notarisierung, Sprache und Ausgabe.";
+"Signing" = "Signierung";
+"Choose the Developer ID Application identity used for the finished DMG." = "Wähle die Developer ID Application-Identität für die fertige DMG.";
+"Identity" = "Identität";
+"No Developer ID Application identities" = "Keine Developer ID Application-Identitäten vorhanden";
+"Refresh" = "Aktualisieren";
+"Notarization" = "Notarisierung";
+"Save or validate the keychain profile used for notarization submissions." = "Speichere oder prüfe das Schlüsselbundprofil für die Notarisierung.";
+"Keychain Profile" = "Schlüsselbundprofil";
+"Create or Validate Profile" = "Profil erstellen oder prüfen";
+"Language" = "Sprache";
+"Select the display language used after the next app restart." = "Wähle die Anzeigesprache, die nach dem nächsten Neustart verwendet wird.";
+"Selected language" = "Ausgewählte Sprache";
+"Output Folder" = "Ausgabeordner";
+"Choose where new DMGs are created by default." = "Wähle, wo neue DMGs standardmäßig erstellt werden.";
+"Choose Default Output Folder" = "Standard-Ausgabeordner wählen";
+"Choose Folder" = "Ordner wählen";
+"Close" = "Schließen";
+"Restart required" = "Neustart erforderlich";
+"Change Language" = "Sprache ändern";
+"DMGBuildNotarize needs to restart before %@ is applied. Do you want to continue?" = "DMGBuildNotarize muss neu gestartet werden, bevor %@ angewendet wird. Möchtest du fortfahren?";
+
+/* CredentialSetupSheet — header */
+"Notary Profile" = "Notarisierungsprofil";
+"Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain." = "Die Notarisierung verwendet App Store Connect-Zugangsdaten. DMGBuildNotarize lässt sie mit Apples Tool prüfen und speichert ein benanntes Profil im Schlüsselbund.";
+"Xcode-managed signing certificates do not include a reusable notarization login for third-party apps." = "Von Xcode verwaltete Signaturzertifikate enthalten kein wiederverwendbares Notarisierungs-Login für Drittanbieter-Apps.";
+
+/* CredentialSetupSheet — form */
+"Profile" = "Profil";
+"Profile Name" = "Profilname";
+"Credentials" = "Zugangsdaten";
+"Method" = "Methode";
+
+/* CredentialSetupSheet — API key fields */
+"Team API Key" = "Team-API-Schlüssel";
+"Private Key" = "Privater Schlüssel";
+"Choose .p8 key" = ".p8-Schlüssel wählen";
+"Choose Key" = "Schlüssel wählen";
+"Key ID" = "Schlüssel-ID";
+"Issuer ID" = "Issuer-ID";
+"Issuer ID from Team Keys" = "Issuer-ID aus Team Keys";
+"Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization." = "Du findest dies in App Store Connect unter Users and Access > Integrations > App Store Connect API > Team Keys. Es ist die Issuer-ID des Teams, nicht die Key ID, und einzelne API-Schlüssel funktionieren nicht für die Notarisierung.";
+"If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password." = "Wenn dein Team keinen weiteren Team-API-Schlüssel erstellen kann, verwende stattdessen die Apple-ID-Methode mit einem app-spezifischen Passwort.";
+"Open App Store Connect API Keys" = "App Store Connect API Keys öffnen";
+"Choose API Private Key" = "Privaten API-Schlüssel wählen";
+
+/* CredentialSetupSheet — Apple ID fields */
+"Apple ID" = "Apple-ID";
+"Team ID" = "Team-ID";
+"Password" = "Passwort";
+"App-specific password" = "App-spezifisches Passwort";
+"Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Erstelle dies auf account.apple.com unter Sign-In and Security > App-Specific Passwords. Für deinen Apple-Account muss die Zwei-Faktor-Authentifizierung aktiviert sein.";
+"Open Apple Account Passwords" = "Apple-Account-Passwörter öffnen";
+"Use %@" = "%@ verwenden";
+
+/* CredentialSetupSheet — actions */
+"Store & Validate" = "Speichern und prüfen";
+
+/* PackagingStage titles — AppleScript path */
+"Validate app" = "App prüfen";
+"Validate notary profile" = "Notarisierungsprofil prüfen";
+"Stage installer" = "Installer vorbereiten";
+"Create writable DMG" = "Beschreibbare DMG erstellen";
+"Apply Finder layout" = "Finder-Layout anwenden";
+"Compress DMG" = "DMG komprimieren";
+
+/* PackagingStage titles — create-dmg path (Build DMG key shared with toolbar button above) */
+"Sign DMG" = "DMG signieren";
+"Notarize" = "Notarisieren";
+"Staple ticket" = "Ticket anhängen";
+"Verify" = "Prüfen";

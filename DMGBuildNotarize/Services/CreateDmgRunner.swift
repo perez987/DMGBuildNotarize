@@ -19,7 +19,7 @@ struct CreateDmgRunner: @unchecked Sendable {
     let runner: any ProcessRunning
 
     /// Standard installation paths checked on Intel and Apple Silicon Macs.
-    static let installationCandidates: [String] = [
+    nonisolated static let installationCandidates: [String] = [
         "/usr/local/bin/create-dmg",    // Intel Homebrew / npm global
         "/opt/homebrew/bin/create-dmg"  // Apple Silicon Homebrew
     ]

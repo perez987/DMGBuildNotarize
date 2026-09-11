@@ -370,13 +370,13 @@ final class DMGBuildNotarizeTests: XCTestCase {
         )
         let runner = MockProcessRunner()
         let scriptRunner = MockAppleScriptRunner()
-        let builder = DmgBuilder(runner: runner, scriptRunner: scriptRunner)
+        let automationAuthorizer = MockFinderAutomationAuthorizer()
+        let builder = DmgBuilder(runner: runner, scriptRunner: scriptRunner, automationAuthorizer: automationAuthorizer)
         let context = try builder.createContext(for: job)
 
-        // Simulate Finder writing .DS_Store to the mounted volume when any
+        // Simulate Finder writing .DS_Store to the mounted volume when the
         // AppleScript executes. The real Finder writes it when the layout
-        // window is closed; writing it on every mock call is a stable
-        // substitute that avoids matching against script content.
+        // window is closed.
         let dsStoreURL = context.mountedVolumeURL.appendingPathComponent(".DS_Store")
         scriptRunner.sideEffect = { _ in
             try Data("stub".utf8).write(to: dsStoreURL)
@@ -384,12 +384,10 @@ final class DMGBuildNotarizeTests: XCTestCase {
 
         try await builder.applyFinderLayout(job: job, context: context)
 
-        // Both the probe and the layout script must be sent via NSAppleScript
-        // so that Apple Events originate from this process (which holds the
-        // user-granted Automation permission) rather than from osascript.
+        XCTAssertEqual(automationAuthorizer.requestCount, 1)
         XCTAssertEqual(scriptRunner.sources.count, 2)
-        XCTAssertTrue(scriptRunner.sources[0].contains("name"))              // probe
-        XCTAssertTrue(scriptRunner.sources[1].contains("background picture")) // layout
+        XCTAssertTrue(scriptRunner.sources[0].contains("name"))
+        XCTAssertTrue(scriptRunner.sources[1].contains("background picture"))
 
         // sync must precede detach; SetFile failure is non-fatal so its
         // presence in the sequence is not required.
@@ -402,6 +400,184 @@ final class DMGBuildNotarizeTests: XCTestCase {
         XCTAssertEqual(runner.commands[syncIndex].arguments, [])
         XCTAssertEqual(runner.commands[detachIndex].arguments.first, "detach")
         try? builder.clean(context: context)
+    }
+
+    func testFinderAutomationDeniedErrorIsActionable() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationError(state: .denied).errorDescription,
+            "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again."
+        )
+    }
+
+    func testFinderAutomationPrivilegeErrorMapsToDeniedState() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationState(status: OSStatus(errAEPrivilegeError)),
+            .denied
+        )
+    }
+
+    func testFinderAutomationUserCancellationMapsToDeniedState() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationState(status: OSStatus(userCanceledErr)),
+            .denied
+        )
+    }
+
+    func testFinderAutomationConsentRequiredMapsToNotDeterminedState() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationState(status: OSStatus(errAEEventWouldRequireUserConsent)),
+            .notDetermined
+        )
+    }
+
+    func testFinderAutomationProcNotFoundMapsToTargetNotRunningState() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationState(status: OSStatus(procNotFound)),
+            .targetNotRunning
+        )
+    }
+
+    func testFinderAutomationUnavailableErrorIsActionable() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationError(state: .targetNotAccessible).errorDescription,
+            "Finder is not currently available for Automation. Try again after Finder finishes launching."
+        )
+    }
+
+    func testFinderAutomationGenericFailureIncludesStatus() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationError(state: .failed(-50)).errorDescription,
+            "Finder Automation permission check failed (OSStatus -50)."
+        )
+    }
+
+    func testFinderAutomationUnknownStatusMapsToFailedState() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationState(status: 12345),
+            .failed(12345)
+        )
+    }
+
+    func testFinderAutomationTimeoutMapsToTransientUnavailableState() {
+        XCTAssertEqual(
+            FinderAutomationAuthorizationState(status: OSStatus(errAETimeout)),
+            .targetNotAccessible
+        )
+    }
+
+    @MainActor
+    func testFinderAutomationAuthorizerLaunchesFinderBeforePrompting() async throws {
+        let sequence = PermissionSequence(states: [.targetNotRunning, .notDetermined, .authorized])
+        let authorizer = DefaultFinderAutomationAuthorizer(
+            permissionResolver: { askUserIfNeeded in
+                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+            },
+            finderLauncher: {
+                await sequence.launchFinder()
+            }
+        )
+
+        try await authorizer.requestPermission()
+
+        XCTAssertEqual(sequence.requests, [false, false, true])
+        XCTAssertEqual(sequence.launchCount, 1)
+    }
+
+    @MainActor
+    func testFinderAutomationAuthorizerDefersToRuntimeProbeWhenPromptStateStaysUndecided() async throws {
+        let sequence = PermissionSequence(states: [.notDetermined, .notDetermined])
+        let authorizer = DefaultFinderAutomationAuthorizer(
+            permissionResolver: { askUserIfNeeded in
+                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+            }
+        )
+
+        try await authorizer.requestPermission()
+
+        XCTAssertEqual(sequence.requests, [false, true])
+        XCTAssertEqual(sequence.launchCount, 0)
+    }
+
+    @MainActor
+    func testFinderAutomationAuthorizerTreatsRepeatedTargetNotRunningAsUnavailable() async {
+        let sequence = PermissionSequence(states: [.targetNotRunning, .targetNotRunning])
+        let authorizer = DefaultFinderAutomationAuthorizer(
+            permissionResolver: { askUserIfNeeded in
+                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+            },
+            finderLauncher: {
+                await sequence.launchFinder()
+            }
+        )
+
+        do {
+            try await authorizer.requestPermission()
+            XCTFail("Expected requestPermission to throw")
+        } catch {
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Finder is not currently available for Automation. Try again after Finder finishes launching."
+            )
+        }
+    }
+
+    @MainActor
+    func testFinderAutomationAuthorizerTreatsLaunchFailureAsUnavailable() async {
+        let sequence = PermissionSequence(states: [.targetNotRunning])
+        let authorizer = DefaultFinderAutomationAuthorizer(
+            permissionResolver: { askUserIfNeeded in
+                sequence.resolve(askUserIfNeeded: askUserIfNeeded)
+            },
+            finderLauncher: {
+                await sequence.launchFinder(result: false)
+            }
+        )
+
+        do {
+            try await authorizer.requestPermission()
+            XCTFail("Expected requestPermission to throw")
+        } catch {
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Finder is not currently available for Automation. Try again after Finder finishes launching."
+            )
+        }
+    }
+
+    func testFinderAutomationProbeConsentRequiredErrorIsActionable() async throws {
+        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let info = try AppBundleInfo.load(from: appURL)
+        let outputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        let job = PackagingJob(
+            appInfo: info,
+            outputURL: outputURL,
+            volumeName: info.defaultVolumeName,
+            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            notaryProfile: "DeveloperID",
+            replaceExistingOutput: false
+        )
+        let scriptRunner = MockAppleScriptRunner()
+        scriptRunner.error = NSError(
+            domain: "NSAppleScript",
+            code: Int(errAEEventWouldRequireUserConsent),
+            userInfo: [NSLocalizedDescriptionKey: "Consent required"]
+        )
+        let builder = DmgBuilder(
+            runner: MockProcessRunner(),
+            scriptRunner: scriptRunner,
+            automationAuthorizer: MockFinderAutomationAuthorizer()
+        )
+        let context = try builder.createContext(for: job)
+
+        do {
+            try await builder.applyFinderLayout(job: job, context: context)
+            XCTFail("Expected applyFinderLayout to throw")
+        } catch {
+            XCTAssertEqual(
+                error.localizedDescription,
+                "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again."
+            )
+        }
     }
 
     func testDmgContextUsesTemporaryCompressedOutputBeforeFinalPublish() throws {
@@ -508,6 +684,26 @@ final class DMGBuildNotarizeTests: XCTestCase {
         XCTAssertFalse(script.contains("set position of item \"Applications\" of diskFolder"))
     }
 
+    func testProgressLogViewRenderStateShowsSuccessInlineWithoutPlaceholder() {
+        let view = ProgressLogView(
+            logText: "",
+            errorMessage: nil,
+            credentialSetupProfileName: nil,
+            result: PackagingResult(outputURL: URL(fileURLWithPath: "/tmp/Fixture App.dmg"), notarizationID: "1234"),
+            onCreateCredentialProfile: {}
+        )
+
+        XCTAssertEqual(
+            view.renderState,
+            ProgressLogView.RenderState(
+                bodyText: nil,
+                showsPlaceholder: false,
+                warningMessage: nil,
+                successPath: "/tmp/Fixture App.dmg"
+            )
+        )
+    }
+
     private func makeFixtureApp(displayName: String, version: String) throws -> URL {
         let root = temporaryDirectory()
         let appURL = root.appendingPathComponent("Fixture.app", isDirectory: true)
@@ -565,6 +761,49 @@ private final class MockAppleScriptRunner: AppleScriptRunning, @unchecked Sendab
         try sideEffect?(source)
         if let error { throw error }
     }
+
+    func executeOnMainActor(_ source: String) async throws {
+        sources.append(source)
+        try sideEffect?(source)
+        if let error { throw error }
+    }
+}
+
+private final class MockFinderAutomationAuthorizer: FinderAutomationAuthorizing, @unchecked Sendable {
+    private(set) var requestCount = 0
+    var error: Error?
+
+    func requestPermission() async throws {
+        requestCount += 1
+        if let error { throw error }
+    }
+}
+
+@MainActor
+private final class PermissionSequence {
+    private let states: [FinderAutomationAuthorizationState]
+    private var index = 0
+    private(set) var requests: [Bool] = []
+    private(set) var launchCount = 0
+
+    init(states: [FinderAutomationAuthorizationState]) {
+        self.states = states
+    }
+
+    func resolve(askUserIfNeeded: Bool) -> FinderAutomationAuthorizationState {
+        requests.append(askUserIfNeeded)
+        defer {
+            if index < states.count - 1 {
+                index += 1
+            }
+        }
+        return states[index]
+    }
+
+    func launchFinder(result: Bool = true) async -> Bool {
+        launchCount += 1
+        return result
+    }
 }
 
 private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
@@ -593,4 +832,3 @@ private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
         return result ?? ProcessResult(command: command, terminationStatus: 0, standardOutput: "", standardError: "")
     }
 }
-

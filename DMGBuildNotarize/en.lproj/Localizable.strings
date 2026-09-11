@@ -42,16 +42,36 @@
 "Log" = "Log";
 "Create %@ Profile" = "Create %@ Profile";
 "Command output will appear here." = "Command output will appear here.";
+"Warning" = "Warning";
+
+/* Finder Automation */
+"DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again." = "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again.";
+"Finder is not currently available for Automation. Try again after Finder finishes launching." = "Finder is not currently available for Automation. Try again after Finder finishes launching.";
+"Finder Automation permission check failed (OSStatus %lld)." = "Finder Automation permission check failed (OSStatus %lld).";
 
 /* SettingsView */
+"Settings" = "Settings";
+"Manage signing, notarization, language, and output preferences." = "Manage signing, notarization, language, and output preferences.";
 "Signing" = "Signing";
+"Choose the Developer ID Application identity used for the finished DMG." = "Choose the Developer ID Application identity used for the finished DMG.";
 "Identity" = "Identity";
 "No Developer ID Application identities" = "No Developer ID Application identities";
 "Refresh" = "Refresh";
 "Notarization" = "Notarization";
+"Save or validate the keychain profile used for notarization submissions." = "Save or validate the keychain profile used for notarization submissions.";
 "Keychain Profile" = "Keychain Profile";
 "Create or Validate Profile" = "Create or Validate Profile";
+"Language" = "Language";
+"Select the display language used after the next app restart." = "Select the display language used after the next app restart.";
+"Selected language" = "Selected language";
+"Output Folder" = "Output Folder";
+"Choose where new DMGs are created by default." = "Choose where new DMGs are created by default.";
 "Choose Default Output Folder" = "Choose Default Output Folder";
+"Choose Folder" = "Choose Folder";
+"Close" = "Close";
+"Restart required" = "Restart required";
+"Change Language" = "Change Language";
+"DMGBuildNotarize needs to restart before %@ is applied. Do you want to continue?" = "DMGBuildNotarize needs to restart before %@ is applied. Do you want to continue?";
 
 /* CredentialSetupSheet — header */
 "Notary Profile" = "Notary Profile";
@@ -68,6 +88,7 @@
 "Team API Key" = "Team API Key";
 "Private Key" = "Private Key";
 "Choose .p8 key" = "Choose .p8 key";
+"Choose Key" = "Choose Key";
 "Key ID" = "Key ID";
 "Issuer ID" = "Issuer ID";
 "Issuer ID from Team Keys" = "Issuer ID from Team Keys";
@@ -82,7 +103,7 @@
 "Password" = "Password";
 "App-specific password" = "App-specific password";
 "Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled.";
-"Open Apple Account Passwords" = "Apple Account Passwords";
+"Open Apple Account Passwords" = "Open Apple Account Passwords";
 "Use %@" = "Use %@";
 
 /* CredentialSetupSheet — actions */
@@ -101,4 +122,3 @@
 "Notarize" = "Notarize";
 "Staple ticket" = "Staple ticket";
 "Verify" = "Verify";
-

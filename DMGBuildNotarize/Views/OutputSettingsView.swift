@@ -3,10 +3,13 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct OutputSettingsView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @ObservedObject var controller: PackagingController
 
     var body: some View {
-        GroupBox("DMG") {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(String(localized: "DMG"))
+                .font(.headline.weight(.semibold))
             Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 10) {
                 GridRow {
                     Text("Volume")
@@ -37,6 +40,8 @@ struct OutputSettingsView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(16)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 20, accentOpacity: 0.18)
     }
 
     private func chooseOutput() {

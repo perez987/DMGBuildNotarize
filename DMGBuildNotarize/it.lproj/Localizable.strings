@@ -1,0 +1,118 @@
+/* ContentView — toolbar */
+"Choose App" = "Scegli app";
+"Build DMG" = "Crea DMG";
+
+/* ContentView — replace-DMG alert */
+"Replace existing DMG?" = "Sostituire il DMG esistente?";
+"Replace" = "Sostituisci";
+"Cancel" = "Annulla";
+
+/* HeaderView — status bar */
+"Packaging and notarizing" = "Creazione e notarizzazione in corso";
+"Ready: %@" = "Pronto: %@";
+"Choose a Developer ID Application identity in Settings" = "Scegli un’identità Developer ID Application nelle Impostazioni";
+"App signature verified" = "Firma dell’app verificata";
+"Drop a signed .app to begin" = "Trascina un file .app firmato per iniziare";
+
+/* DropTargetView */
+"Inspecting App" = "Controllo dell’app";
+"Drop Signed App" = "Rilascia app firmata";
+".app bundle" = "bundle .app";
+
+/* AppSummaryView */
+"App" = "App";
+"No App Selected" = "Nessuna app selezionata";
+"Name" = "Nome";
+"Bundle ID" = "Bundle ID";
+"Version" = "Versione";
+"Executable" = "Eseguibile";
+"Signature" = "Firma";
+"Checking" = "Controllo in corso";
+"Developer ID ready" = "Developer ID pronta";
+
+/* OutputSettingsView */
+"DMG" = "DMG";
+"Volume" = "Volume";
+"Output" = "Output";
+"Volume name" = "Nome del volume";
+"Choose output" = "Scegli output";
+"Choose Output" = "Scegli output";
+
+/* ProgressLogView */
+"Log" = "Log";
+"Create %@ Profile" = "Crea profilo %@";
+"Command output will appear here." = "L’output del comando apparirà qui.";
+
+/* SettingsView */
+"Settings" = "Impostazioni";
+"Manage signing, notarization, language, and output preferences." = "Gestisci le preferenze di firma, notarizzazione, lingua e output.";
+"Signing" = "Firma";
+"Choose the Developer ID Application identity used for the finished DMG." = "Scegli l’identità Developer ID Application usata per il DMG finale.";
+"Identity" = "Identità";
+"No Developer ID Application identities" = "Nessuna identità Developer ID Application";
+"Refresh" = "Aggiorna";
+"Notarization" = "Notarizzazione";
+"Save or validate the keychain profile used for notarization submissions." = "Salva o convalida il profilo Portachiavi usato per l’invio alla notarizzazione.";
+"Keychain Profile" = "Profilo Portachiavi";
+"Create or Validate Profile" = "Crea o convalida profilo";
+"Language" = "Lingua";
+"Select the display language used after the next app restart." = "Scegli la lingua dell’interfaccia da usare dopo il prossimo riavvio dell’app.";
+"Selected language" = "Lingua selezionata";
+"Output Folder" = "Cartella di output";
+"Choose where new DMGs are created by default." = "Scegli dove creare per impostazione predefinita i nuovi DMG.";
+"Choose Default Output Folder" = "Scegli cartella di output predefinita";
+"Choose Folder" = "Scegli cartella";
+"Close" = "Chiudi";
+"Restart required" = "Riavvio necessario";
+"Change Language" = "Cambia lingua";
+"DMGBuildNotarize needs to restart before %@ is applied. Do you want to continue?" = "DMGBuildNotarize deve riavviarsi prima di applicare %@. Vuoi continuare?";
+
+/* CredentialSetupSheet — header */
+"Notary Profile" = "Profilo di notarizzazione";
+"Notarization uses App Store Connect credentials. DMGBuildNotarize asks Apple's tool to validate them and save a named profile in Keychain." = "La notarizzazione usa le credenziali di App Store Connect. DMGBuildNotarize chiede allo strumento di Apple di convalidarle e salvare un profilo con nome nel Portachiavi.";
+"Xcode-managed signing certificates do not include a reusable notarization login for third-party apps." = "I certificati di firma gestiti da Xcode non includono un accesso di notarizzazione riutilizzabile per app di terze parti.";
+
+/* CredentialSetupSheet — form */
+"Profile" = "Profilo";
+"Profile Name" = "Nome profilo";
+"Credentials" = "Credenziali";
+"Method" = "Metodo";
+
+/* CredentialSetupSheet — API key fields */
+"Team API Key" = "Chiave API del team";
+"Private Key" = "Chiave privata";
+"Choose .p8 key" = "Scegli chiave .p8";
+"Choose Key" = "Scegli chiave";
+"Key ID" = "ID chiave";
+"Issuer ID" = "ID emittente";
+"Issuer ID from Team Keys" = "ID emittente delle Team Keys";
+"Find this on App Store Connect under Users and Access > Integrations > App Store Connect API > Team Keys. It is the Issuer ID for the team, not the Key ID, and individual API keys do not work with notarization." = "Trovalo in App Store Connect, in Users and Access > Integrations > App Store Connect API > Team Keys. È l’Issuer ID del team, non il Key ID, e le singole chiavi API non funzionano con la notarizzazione.";
+"If your team cannot create another Team API Key, use the Apple ID method instead with an app-specific password." = "Se il tuo team non può creare un’altra chiave API del team, usa invece il metodo Apple ID con una password specifica per l’app.";
+"Open App Store Connect API Keys" = "Apri le chiavi API di App Store Connect";
+"Choose API Private Key" = "Scegli chiave API privata";
+
+/* CredentialSetupSheet — Apple ID fields */
+"Apple ID" = "Apple ID";
+"Team ID" = "ID team";
+"Password" = "Password";
+"App-specific password" = "Password specifica dell’app";
+"Generate this at account.apple.com under Sign-In and Security > App-Specific Passwords. Your Apple Account must have two-factor authentication enabled." = "Generala su account.apple.com, in Sign-In and Security > App-Specific Passwords. Il tuo account Apple deve avere l’autenticazione a due fattori attiva.";
+"Open Apple Account Passwords" = "Apri le password dell’account Apple";
+"Use %@" = "Usa %@";
+
+/* CredentialSetupSheet — actions */
+"Store & Validate" = "Salva e convalida";
+
+/* PackagingStage titles — AppleScript path */
+"Validate app" = "Convalida app";
+"Validate notary profile" = "Convalida profilo di notarizzazione";
+"Stage installer" = "Prepara installer";
+"Create writable DMG" = "Crea DMG scrivibile";
+"Apply Finder layout" = "Applica layout del Finder";
+"Compress DMG" = "Comprimi DMG";
+
+/* PackagingStage titles — create-dmg path (Build DMG key shared with toolbar button above) */
+"Sign DMG" = "Firma DMG";
+"Notarize" = "Notarizza";
+"Staple ticket" = "Applica ticket";
+"Verify" = "Verifica";

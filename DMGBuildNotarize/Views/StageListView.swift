@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct StageListView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let stages: [StageProgress]
 
     var body: some View {
@@ -17,8 +18,16 @@ struct StageListView: View {
                 Spacer()
             }
             .padding(.vertical, 3)
+            .listRowBackground(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(AppTheme.logBackground(for: colorScheme).opacity(0.35))
+                    .padding(.vertical, 2)
+                    .padding(.horizontal, 6)
+            )
         }
         .listStyle(.inset)
+        .scrollContentBackground(.hidden)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 20, accentOpacity: 0.16)
     }
 
     private func symbol(for state: StageState) -> String {
