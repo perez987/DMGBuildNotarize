@@ -2,7 +2,7 @@
 
 ![Xcode](https://img.shields.io/badge/Xcode-16+-blue.svg)
 ![Swift](https://img.shields.io/badge/Swift-5+-lavender.svg)
-![Platform](https://img.shields.io/badge/macOS-16+-orange.svg)
+![Platform](https://img.shields.io/badge/macOS-14+-orange.svg)
 
 DMGBuildNotarize is a simple Mac app that turns a signed `.app` bundle into a polished, signed, notarized `.dmg` file.
 

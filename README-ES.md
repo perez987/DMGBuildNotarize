@@ -1,5 +1,9 @@
 # DMGBuildNotarize
 
+![Xcode](https://img.shields.io/badge/Xcode-16+-blue.svg)
+![Swift](https://img.shields.io/badge/Swift-5+-lavender.svg)
+![Platform](https://img.shields.io/badge/macOS-14+-orange.svg)
+
 DMGBuildNotarize es una sencilla aplicación para Mac que convierte una `.app` firmada en un archivo `.dmg` estilizado, firmado y notarizado.
 
 En pocas palabras: arrastra tu app para Mac, elige dónde debe guardarse la DMG, haz clic en **Crear DMG** y deja que la aplicación ejecute por ti los pasos de empaquetado y notarización de Apple.
