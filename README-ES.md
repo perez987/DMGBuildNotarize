@@ -23,6 +23,9 @@ El principal mérito del código base corresponde a *carbocation* (James Pirrucc
 Estas son mis contribuciones al proyecto:
 
 - Añadir estilo a la DMG: implementar un fondo personalizado (incluido como recurso de imagen empaquetado) con diseño mejorado de la ventana del Finder
+- Dos opciones para crear el archivo DMG:
+   - AppleScript: incluido en el repositorio original y disponible en todos los Mac; puede fallar en algunas versiones del sistema operativo, es lento y requiere permisos de automatización.
+   - `create-dmg`: una herramienta externa gratuita que requiere Node.js; es fiable en todas las versiones de macOS, rápida y no requiere permisos especiales.
 - Añadir la opción preferida de usar `create-dmg` para crear la ventana estilizada del Finder; si `create-dmg` no está instalada, la aplicación vuelve automáticamente al flujo basado en AppleScript
 - Corregir la automatización del Finder en el modo de creación de DMG con AppleScript
 - Añadir persistencia de credenciales: almacenamiento seguro en el Llavero para contraseñas específicas de app y persistencia en `UserDefaults` para los campos de credenciales de notarización
@@ -35,6 +38,8 @@ Estas son mis contribuciones al proyecto:
 - Pulir la interfaz de Ajustes y añadir selección de idioma con confirmación de reinicio.
 
 **Nota**: La primera vez que ejecutes la aplicación en modo AppleScript, un aviso informará al usuario de que «DMGBuildNotarize usa automatización del Finder para crear diseños personalizados de ventanas de instalador» y solicitará permiso para que DMGBuildNotarize envíe  Apple Events al Finder. Debes conceder este permiso para que la DMG se cree correctamente. No es necesario si la DMG se genera en modo `create-dmg`.
+
+**Recomendación**: prueba la aplicación «tal cual», sin instalar `create-dmg`. Si obtienes archivos DMG estilizados con una disposición atractiva de la ventana del Finder, quédate con esa opción. Si los archivos DMG presentan la disposición básica y poco estética típica de los DMG estándar, instala `create-dmg`: el proceso de creación es considerablemente más rápido, no necesitas conceder permisos de automatización y las imágenes DMG siempre contarán con una disposición mejorada de la ventana del Finder.
 
 ## Complemento: create-dmg
 
@@ -81,6 +86,10 @@ La imagen DMG creada por `create-dmg` tiene un diseño elegante que me gusta muc
 ### Ventana de ajustes
 
 La interfaz de Ajustes y el selector de idioma se han rediseñado. Los flujos de configuración y de credenciales se ajustan al tratamiento visual de la ventana principal, añaden selección de idioma a nivel de aplicación con confirmación de reinicio y amplían las traducciones incluidas para que el nuevo selector pueda cambiar a idiomas adicionales compatibles.
+
+|     |
+|:---:|
+| ![Settings window](Images/Settings-es.png) |
 
 ---
 

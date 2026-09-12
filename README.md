@@ -23,6 +23,9 @@ The main credits for the core code go to *carbocation* (James Pirruccello), auth
 These are my contributions to the project:
 
 - Add DMG styling: implement custom DMG background (include bundled background image asset) with enhanced design of the Finder window
+- Two options for creating the DMG file:
+   - AppleScript: included in the original repository and available on all Macs; it may fail on some operating system versions, is slow, and requires automation permissions.
+   - `create-dmg`: a free external tool that requires Node.js; it is reliable across all macOS versions, fast, and does not require special permissions.
 - Add the preferred option of using `create-dmg` to build the styled Finder window; if `create-dmg` is not installed, the app falls back to the AppleScript flow automatically
 - Fix Finder Automation in the AppleScript DMG creation mode
 - Add credentials persistence: add secure Keychain storage for app-specific passwords and UserDefaults persistence for notary credential fields
@@ -33,6 +36,8 @@ These are my contributions to the project:
 - Integrate error icon and text into log messages
 - Add language system with language selector, integrated in Settings view
 - Polish preferences UI and add in-app language selection with restart confirmation.
+ 
+**Recommendation**: try the app "as is", without installing `create-dmg`. If you get stylized DMGs with an attractive Finder window layout, stick with that. If the DMGs have the basic, ugly Finder window layout typical of standard DMGs, install `create-dmg`: the DMG creation process is significantly faster, you don't need to grant automation permissions, and the DMG images will always feature an enhanced Finder window layout.
 
 **Note**: The first time you run the application in AppleScript mode, a prompt informs to the user that "DMGBuildNotarize uses Finder automation to create custom installer window layouts" and asking for permission to allow DMGBuildNotarize to send Apple Events to Finder. You must grant this permission for the DMG to be created correctly. This is not necessary if the DMG is created in create-dmg mode.
 
@@ -86,8 +91,9 @@ Preferences UI and language selector have been restyled.  Settings and credentia
 |:---:|
 | ![Settings window](Images/Settings.png) |
 
-
 ---
+
+## Original README
 
 ## The Problem
 
