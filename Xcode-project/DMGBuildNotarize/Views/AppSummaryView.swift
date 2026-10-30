@@ -11,12 +11,24 @@ struct AppSummaryView: View {
                 .font(.headline.weight(.semibold))
 
             if let info {
-                Grid(alignment: .leading, horizontalSpacing: 18, verticalSpacing: 8) {
+                Grid(
+                    alignment: .leading,
+                    horizontalSpacing: 18,
+                    verticalSpacing: 8
+                ) {
                     SummaryRow("Name", info.displayName)
                     SummaryRow("Bundle ID", info.bundleIdentifier)
-                    SummaryRow("Version", "\(info.shortVersion) (\(info.buildVersion))")
+                    SummaryRow(
+                        "Version",
+                        "\(info.shortVersion) (\(info.buildVersion))"
+                    )
                     SummaryRow("Executable", info.executableName)
-                    SummaryRow("Signature", report == nil ? String(localized: "Checking") : String(localized: "Developer ID ready"))
+                    SummaryRow(
+                        "Signature",
+                        report == nil
+                            ? String(localized: "Checking")
+                            : String(localized: "Developer ID ready")
+                    )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else {
@@ -32,7 +44,11 @@ struct AppSummaryView: View {
             }
         }
         .padding(16)
-        .glassCard(colorScheme: colorScheme, cornerRadius: 20, accentOpacity: 0.18)
+        .glassCard(
+            colorScheme: colorScheme,
+            cornerRadius: 20,
+            accentOpacity: 0.18
+        )
     }
 }
 

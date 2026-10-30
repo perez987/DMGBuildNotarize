@@ -1,28 +1,39 @@
 import XCTest
+
 @testable import DMGBuildNotarize
 
 final class DMGBuildNotarizeTests: XCTestCase {
     func testAppDeclaresAppleEventsUsageDescription() {
         XCTAssertEqual(
-            Bundle.main.object(forInfoDictionaryKey: "NSAppleEventsUsageDescription") as? String,
+            Bundle.main.object(
+                forInfoDictionaryKey: "NSAppleEventsUsageDescription"
+            ) as? String,
             "DMGBuildNotarize uses Finder automation to create custom installer window layouts."
         )
     }
 
     func testAppleScriptRunnerPropagatesExecutionErrors() async {
         do {
-            try await DefaultAppleScriptRunner().execute(#"error "Deliberate test failure" number -2700"#)
+            try await DefaultAppleScriptRunner().execute(
+                #"error "Deliberate test failure" number -2700"#
+            )
             XCTFail("Expected the AppleScript execution error to be thrown")
         } catch {
             let error = error as NSError
             XCTAssertEqual(error.domain, "NSAppleScript")
             XCTAssertEqual(error.code, -2700)
-            XCTAssertEqual(error.localizedDescription, "Deliberate test failure")
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Deliberate test failure"
+            )
         }
     }
 
     func testAppBundleInfoLoadsRequiredMetadata() throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
 
         let info = try AppBundleInfo.load(from: appURL)
 
@@ -34,37 +45,70 @@ final class DMGBuildNotarizeTests: XCTestCase {
 
     func testFileAndVolumeNamesAreSanitized() {
         XCTAssertEqual("Bad/Name:1".sanitizedFileComponent, "Bad-Name-1")
-        XCTAssertEqual("Bad/Name:1".sanitizedVolumeName(defaultValue: "Installer"), "Bad Name 1")
-        XCTAssertEqual("///".sanitizedVolumeName(defaultValue: "Installer"), "Installer")
+        XCTAssertEqual(
+            "Bad/Name:1".sanitizedVolumeName(defaultValue: "Installer"),
+            "Bad Name 1"
+        )
+        XCTAssertEqual(
+            "///".sanitizedVolumeName(defaultValue: "Installer"),
+            "Installer"
+        )
     }
 
     func testSigningIdentityParserFiltersDeveloperIDApplicationIdentities() {
         let output = """
-          1) ABCDEF1234567890 "Developer ID Application: Example Co (TEAMID)"
-          2) 1111111111111111 "Apple Development: Example Co (TEAMID)"
-             2 valid identities found
-        """
+              1) ABCDEF1234567890 "Developer ID Application: Example Co (TEAMID)"
+              2) 1111111111111111 "Apple Development: Example Co (TEAMID)"
+                 2 valid identities found
+            """
 
-        let identities = SigningClient.parseDeveloperIDApplicationIdentities(output)
+        let identities = SigningClient.parseDeveloperIDApplicationIdentities(
+            output
+        )
 
-        XCTAssertEqual(identities, [SigningIdentity(hash: "ABCDEF1234567890", name: "Developer ID Application: Example Co (TEAMID)")])
+        XCTAssertEqual(
+            identities,
+            [
+                SigningIdentity(
+                    hash: "ABCDEF1234567890",
+                    name: "Developer ID Application: Example Co (TEAMID)"
+                )
+            ]
+        )
     }
 
     func testSigningIdentityExtractsTeamID() {
         XCTAssertEqual(
-            SigningIdentity.extractTeamID(from: "Developer ID Application: Example Co (TEAMID1234)"),
+            SigningIdentity.extractTeamID(
+                from: "Developer ID Application: Example Co (TEAMID1234)"
+            ),
             "TEAMID1234"
         )
-        XCTAssertNil(SigningIdentity.extractTeamID(from: "Developer ID Application: Example Co"))
+        XCTAssertNil(
+            SigningIdentity.extractTeamID(
+                from: "Developer ID Application: Example Co"
+            )
+        )
     }
 
     func testDistributionReadySignatureDetection() {
-        XCTAssertTrue(AppValidator.isDistributionReadySignature("Authority=Developer ID Application: Example Co (TEAMID)"))
-        XCTAssertFalse(AppValidator.isDistributionReadySignature("Authority=Apple Development: Example Co (TEAMID)"))
+        XCTAssertTrue(
+            AppValidator.isDistributionReadySignature(
+                "Authority=Developer ID Application: Example Co (TEAMID)"
+            )
+        )
+        XCTAssertFalse(
+            AppValidator.isDistributionReadySignature(
+                "Authority=Apple Development: Example Co (TEAMID)"
+            )
+        )
     }
 
     func testAppValidationLogsConciseSummaryInsteadOfToolOutput() async throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let runner = MockProcessRunner(results: [
             ProcessResult(
                 command: .system("/usr/bin/codesign", ["--verify"]),
@@ -77,19 +121,19 @@ final class DMGBuildNotarizeTests: XCTestCase {
                 terminationStatus: 0,
                 standardOutput: "",
                 standardError: """
-                Executable=/Applications/Fixture App.app/Contents/MacOS/Fixture App
-                Authority=Developer ID Application: Example Co (TEAMID)
-                """
+                    Executable=/Applications/Fixture App.app/Contents/MacOS/Fixture App
+                    Authority=Developer ID Application: Example Co (TEAMID)
+                    """
             ),
             ProcessResult(
                 command: .system("/usr/sbin/spctl", ["-a"]),
                 terminationStatus: 0,
                 standardOutput: "",
                 standardError: """
-                /Applications/Fixture App.app: accepted
-                source=Notarized Developer ID
-                """
-            )
+                    /Applications/Fixture App.app: accepted
+                    source=Notarized Developer ID
+                    """
+            ),
         ])
         let validator = AppValidator(runner: runner)
         var logged = ""
@@ -102,18 +146,31 @@ final class DMGBuildNotarizeTests: XCTestCase {
         XCTAssertTrue(logged.contains("Reading signing certificate details…"))
         XCTAssertTrue(logged.contains("Checking Gatekeeper acceptance…"))
         XCTAssertTrue(logged.contains("App check summary:"))
-        XCTAssertTrue(logged.contains("Signing: Developer ID Application: Example Co (TEAMID)"))
-        XCTAssertTrue(logged.contains("Gatekeeper: /Applications/Fixture App.app: accepted"))
+        XCTAssertTrue(
+            logged.contains(
+                "Signing: Developer ID Application: Example Co (TEAMID)"
+            )
+        )
+        XCTAssertTrue(
+            logged.contains(
+                "Gatekeeper: /Applications/Fixture App.app: accepted"
+            )
+        )
         XCTAssertFalse(logged.contains("codesign verbose output"))
         XCTAssertFalse(logged.contains("source=Notarized Developer ID"))
     }
 
     func testNotarySubmissionParsing() throws {
-        let submission = try NotaryClient.parseSubmission("""
-        {"id":"1234","status":"Accepted","message":null}
-        """)
+        let submission = try NotaryClient.parseSubmission(
+            """
+            {"id":"1234","status":"Accepted","message":null}
+            """
+        )
 
-        XCTAssertEqual(submission, NotarySubmission(id: "1234", status: "Accepted", message: nil))
+        XCTAssertEqual(
+            submission,
+            NotarySubmission(id: "1234", status: "Accepted", message: nil)
+        )
     }
 
     func testMissingNotaryProfileErrorIsActionable() {
@@ -122,10 +179,10 @@ final class DMGBuildNotarizeTests: XCTestCase {
             terminationStatus: 69,
             standardOutput: "",
             standardError: """
-            Error: No Keychain password item found for profile: DeveloperID
+                Error: No Keychain password item found for profile: DeveloperID
 
-            Run 'notarytool store-credentials' to create another credential profile.
-            """
+                Run 'notarytool store-credentials' to create another credential profile.
+                """
         )
 
         let error = NotaryClient.normalizedError(
@@ -133,9 +190,20 @@ final class DMGBuildNotarizeTests: XCTestCase {
             keychainProfile: "DeveloperID"
         )
 
-        XCTAssertEqual(error as? NotaryError, .missingKeychainProfile("DeveloperID"))
-        XCTAssertTrue(error.localizedDescription.contains("Create or validate the profile"))
-        XCTAssertTrue(error.localizedDescription.contains("xcrun notarytool store-credentials 'DeveloperID' --validate"))
+        XCTAssertEqual(
+            error as? NotaryError,
+            .missingKeychainProfile("DeveloperID")
+        )
+        XCTAssertTrue(
+            error.localizedDescription.contains(
+                "Create or validate the profile"
+            )
+        )
+        XCTAssertTrue(
+            error.localizedDescription.contains(
+                "xcrun notarytool store-credentials 'DeveloperID' --validate"
+            )
+        )
     }
 
     func testCredentialSetupBuildsAPIKeyArguments() throws {
@@ -160,7 +228,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
                 "--key-id",
                 "ABC123",
                 "--issuer",
-                "11111111-2222-3333-4444-555555555555"
+                "11111111-2222-3333-4444-555555555555",
             ]
         )
     }
@@ -187,7 +255,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
                 "--team-id",
                 "TEAMID1234",
                 "--password",
-                "app-specific-password"
+                "app-specific-password",
             ]
         )
     }
@@ -202,7 +270,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
             )
         )
 
-        let arguments = try CredentialSetupService.storeCredentialsArguments(for: request)
+        let arguments = try CredentialSetupService.storeCredentialsArguments(
+            for: request
+        )
 
         XCTAssertEqual(arguments.last, "abcd-efgh-ijkl-mnop")
     }
@@ -221,7 +291,10 @@ final class DMGBuildNotarizeTests: XCTestCase {
 
         let result = try await service.storeCredentials(request)
 
-        XCTAssertEqual(result, CredentialSetupResult(profileName: "DeveloperID"))
+        XCTAssertEqual(
+            result,
+            CredentialSetupResult(profileName: "DeveloperID")
+        )
         XCTAssertEqual(runner.commands.count, 1)
         XCTAssertEqual(runner.commands[0].executableURL.path, "/usr/bin/xcrun")
         XCTAssertEqual(
@@ -236,13 +309,15 @@ final class DMGBuildNotarizeTests: XCTestCase {
                 "--team-id",
                 "TEAMID1234",
                 "--password",
-                "app-specific-password"
+                "app-specific-password",
             ]
         )
         XCTAssertEqual(runner.commands[0].timeout, 300)
     }
 
-    func testCredentialSetupFailureDoesNotExposeAppSpecificPassword() async throws {
+    func testCredentialSetupFailureDoesNotExposeAppSpecificPassword()
+        async throws
+    {
         let password = "abcd-efgh-ijkl-mnop"
         let command = ProcessCommand.system(
             "/usr/bin/xcrun",
@@ -256,7 +331,7 @@ final class DMGBuildNotarizeTests: XCTestCase {
                 "--team-id",
                 "TEAMID1234",
                 "--password",
-                password
+                password,
             ]
         )
         let result = ProcessResult(
@@ -265,7 +340,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
             standardOutput: "",
             standardError: "Invalid credentials."
         )
-        let runner = MockProcessRunner(error: ProcessRunnerError.nonZeroExit(result))
+        let runner = MockProcessRunner(
+            error: ProcessRunnerError.nonZeroExit(result)
+        )
         let service = CredentialSetupService(runner: runner)
         let request = NotaryCredentialSetupRequest(
             profileName: "DeveloperID",
@@ -280,7 +357,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
             _ = try await service.storeCredentials(request)
             XCTFail("Expected credential setup to fail.")
         } catch {
-            XCTAssertTrue(error.localizedDescription.contains("Invalid credentials."))
+            XCTAssertTrue(
+                error.localizedDescription.contains("Invalid credentials.")
+            )
             XCTAssertFalse(error.localizedDescription.contains(password))
         }
     }
@@ -289,15 +368,25 @@ final class DMGBuildNotarizeTests: XCTestCase {
     func testControllerRequiresSuccessfulValidationBeforeBuild() throws {
         let settings = makeSettings()
         let controller = PackagingController(settings: settings)
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
 
         controller.selectedAppInfo = info
-        controller.outputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        controller.outputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
 
         XCTAssertFalse(controller.canBuild)
 
-        controller.validationReport = ValidationReport(appInfo: info, codeSignSummary: "", gatekeeperSummary: "", checkedAt: Date())
+        controller.validationReport = ValidationReport(
+            appInfo: info,
+            codeSignSummary: "",
+            gatekeeperSummary: "",
+            checkedAt: Date()
+        )
         XCTAssertTrue(controller.canBuild)
 
         controller.isInspectingApp = true
@@ -314,7 +403,10 @@ final class DMGBuildNotarizeTests: XCTestCase {
         XCTAssertEqual(runner.commands[0].executableURL.path, "/usr/bin/xcrun")
         XCTAssertEqual(
             runner.commands[0].arguments,
-            ["notarytool", "history", "--keychain-profile", "DeveloperID", "--output-format", "json"]
+            [
+                "notarytool", "history", "--keychain-profile", "DeveloperID",
+                "--output-format", "json",
+            ]
         )
         XCTAssertEqual(runner.commands[0].timeout, 60)
     }
@@ -329,14 +421,22 @@ final class DMGBuildNotarizeTests: XCTestCase {
     }
 
     func testDmgStagingCopiesAppAndApplicationsSymlink() throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
-        let outputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        let outputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
         let job = PackagingJob(
             appInfo: info,
             outputURL: outputURL,
             volumeName: info.defaultVolumeName,
-            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            signingIdentity: SigningIdentity(
+                hash: "ABC",
+                name: "Developer ID Application: Example"
+            ),
             notaryProfile: "DeveloperID",
             replaceExistingOutput: false
         )
@@ -345,39 +445,71 @@ final class DMGBuildNotarizeTests: XCTestCase {
 
         try builder.stageVolume(job: job, context: context)
 
-        XCTAssertTrue(FileManager.default.fileExists(atPath: context.stagedDirectory.appendingPathComponent("Fixture.app").path))
-        let applicationsLink = context.stagedDirectory.appendingPathComponent("Applications")
-        XCTAssertEqual(try FileManager.default.destinationOfSymbolicLink(atPath: applicationsLink.path), "/Applications")
+        XCTAssertTrue(
+            FileManager.default.fileExists(
+                atPath: context.stagedDirectory.appendingPathComponent(
+                    "Fixture.app"
+                ).path
+            )
+        )
+        let applicationsLink = context.stagedDirectory.appendingPathComponent(
+            "Applications"
+        )
+        XCTAssertEqual(
+            try FileManager.default.destinationOfSymbolicLink(
+                atPath: applicationsLink.path
+            ),
+            "/Applications"
+        )
         let backgroundImage = context.stagedDirectory
             .appendingPathComponent(".background", isDirectory: true)
             .appendingPathComponent("background.png")
-        XCTAssertTrue(FileManager.default.fileExists(atPath: backgroundImage.path))
-        XCTAssertEqual(Array(try Data(contentsOf: backgroundImage).prefix(8)), [137, 80, 78, 71, 13, 10, 26, 10])
+        XCTAssertTrue(
+            FileManager.default.fileExists(atPath: backgroundImage.path)
+        )
+        XCTAssertEqual(
+            Array(try Data(contentsOf: backgroundImage).prefix(8)),
+            [137, 80, 78, 71, 13, 10, 26, 10]
+        )
         try? builder.clean(context: context)
     }
 
     func testFinderLayoutFlushesVolumeMetadataBeforeDetach() async throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
-        let outputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        let outputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
         let job = PackagingJob(
             appInfo: info,
             outputURL: outputURL,
             volumeName: info.defaultVolumeName,
-            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            signingIdentity: SigningIdentity(
+                hash: "ABC",
+                name: "Developer ID Application: Example"
+            ),
             notaryProfile: "DeveloperID",
             replaceExistingOutput: false
         )
         let runner = MockProcessRunner()
         let scriptRunner = MockAppleScriptRunner()
         let automationAuthorizer = MockFinderAutomationAuthorizer()
-        let builder = DmgBuilder(runner: runner, scriptRunner: scriptRunner, automationAuthorizer: automationAuthorizer)
+        let builder = DmgBuilder(
+            runner: runner,
+            scriptRunner: scriptRunner,
+            automationAuthorizer: automationAuthorizer
+        )
         let context = try builder.createContext(for: job)
 
         // Simulate Finder writing .DS_Store to the mounted volume when the
         // AppleScript executes. The real Finder writes it when the layout
         // window is closed.
-        let dsStoreURL = context.mountedVolumeURL.appendingPathComponent(".DS_Store")
+        let dsStoreURL = context.mountedVolumeURL.appendingPathComponent(
+            ".DS_Store"
+        )
         scriptRunner.sideEffect = { _ in
             try Data("stub".utf8).write(to: dsStoreURL)
         }
@@ -405,27 +537,36 @@ final class DMGBuildNotarizeTests: XCTestCase {
     func testFinderAutomationDeniedErrorIsActionable() {
         XCTAssertEqual(
             FinderAutomationAuthorizationError(state: .denied).errorDescription,
-            String(localized: "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again.")
+            String(
+                localized:
+                    "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again."
+            )
         )
     }
 
     func testFinderAutomationPrivilegeErrorMapsToDeniedState() {
         XCTAssertEqual(
-            FinderAutomationAuthorizationState(status: OSStatus(errAEPrivilegeError)),
+            FinderAutomationAuthorizationState(
+                status: OSStatus(errAEPrivilegeError)
+            ),
             .denied
         )
     }
 
     func testFinderAutomationUserCancellationMapsToDeniedState() {
         XCTAssertEqual(
-            FinderAutomationAuthorizationState(status: OSStatus(userCanceledErr)),
+            FinderAutomationAuthorizationState(
+                status: OSStatus(userCanceledErr)
+            ),
             .denied
         )
     }
 
     func testFinderAutomationConsentRequiredMapsToNotDeterminedState() {
         XCTAssertEqual(
-            FinderAutomationAuthorizationState(status: OSStatus(errAEEventWouldRequireUserConsent)),
+            FinderAutomationAuthorizationState(
+                status: OSStatus(errAEEventWouldRequireUserConsent)
+            ),
             .notDetermined
         )
     }
@@ -439,16 +580,24 @@ final class DMGBuildNotarizeTests: XCTestCase {
 
     func testFinderAutomationUnavailableErrorIsActionable() {
         XCTAssertEqual(
-            FinderAutomationAuthorizationError(state: .targetNotAccessible).errorDescription,
-            String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
+            FinderAutomationAuthorizationError(state: .targetNotAccessible)
+                .errorDescription,
+            String(
+                localized:
+                    "Finder is not currently available for Automation. Try again after Finder finishes launching."
+            )
         )
     }
 
     func testFinderAutomationGenericFailureIncludesStatus() {
         XCTAssertEqual(
-            FinderAutomationAuthorizationError(state: .failed(-50)).errorDescription,
+            FinderAutomationAuthorizationError(state: .failed(-50))
+                .errorDescription,
             String.localizedStringWithFormat(
-                String(localized: "Finder Automation permission check failed (OSStatus %lld)."),
+                String(
+                    localized:
+                        "Finder Automation permission check failed (OSStatus %lld)."
+                ),
                 Int64(-50)
             )
         )
@@ -469,8 +618,12 @@ final class DMGBuildNotarizeTests: XCTestCase {
     }
 
     @MainActor
-    func testFinderAutomationAuthorizerLaunchesFinderBeforePrompting() async throws {
-        let sequence = PermissionSequence(states: [.targetNotRunning, .notDetermined, .authorized])
+    func testFinderAutomationAuthorizerLaunchesFinderBeforePrompting()
+        async throws
+    {
+        let sequence = PermissionSequence(states: [
+            .targetNotRunning, .notDetermined, .authorized,
+        ])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
                 await MainActor.run {
@@ -489,8 +642,13 @@ final class DMGBuildNotarizeTests: XCTestCase {
     }
 
     @MainActor
-    func testFinderAutomationAuthorizerDefersToRuntimeProbeWhenPromptStateStaysUndecided() async throws {
-        let sequence = PermissionSequence(states: [.notDetermined, .notDetermined])
+    func
+        testFinderAutomationAuthorizerDefersToRuntimeProbeWhenPromptStateStaysUndecided()
+        async throws
+    {
+        let sequence = PermissionSequence(states: [
+            .notDetermined, .notDetermined,
+        ])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
                 await MainActor.run {
@@ -506,8 +664,13 @@ final class DMGBuildNotarizeTests: XCTestCase {
     }
 
     @MainActor
-    func testFinderAutomationAuthorizerTreatsRepeatedTargetNotRunningAsUnavailable() async {
-        let sequence = PermissionSequence(states: [.targetNotRunning, .targetNotRunning])
+    func
+        testFinderAutomationAuthorizerTreatsRepeatedTargetNotRunningAsUnavailable()
+        async
+    {
+        let sequence = PermissionSequence(states: [
+            .targetNotRunning, .targetNotRunning,
+        ])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
                 await MainActor.run {
@@ -525,13 +688,17 @@ final class DMGBuildNotarizeTests: XCTestCase {
         } catch {
             XCTAssertEqual(
                 error.localizedDescription,
-                String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
+                String(
+                    localized:
+                        "Finder is not currently available for Automation. Try again after Finder finishes launching."
+                )
             )
         }
     }
 
     @MainActor
-    func testFinderAutomationAuthorizerTreatsLaunchFailureAsUnavailable() async {
+    func testFinderAutomationAuthorizerTreatsLaunchFailureAsUnavailable() async
+    {
         let sequence = PermissionSequence(states: [.targetNotRunning])
         let authorizer = DefaultFinderAutomationAuthorizer(
             permissionResolver: { askUserIfNeeded in
@@ -550,20 +717,33 @@ final class DMGBuildNotarizeTests: XCTestCase {
         } catch {
             XCTAssertEqual(
                 error.localizedDescription,
-                String(localized: "Finder is not currently available for Automation. Try again after Finder finishes launching.")
+                String(
+                    localized:
+                        "Finder is not currently available for Automation. Try again after Finder finishes launching."
+                )
             )
         }
     }
 
-    func testFinderAutomationProbeConsentRequiredErrorIsActionable() async throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+    func testFinderAutomationProbeConsentRequiredErrorIsActionable()
+        async throws
+    {
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
-        let outputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        let outputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
         let job = PackagingJob(
             appInfo: info,
             outputURL: outputURL,
             volumeName: info.defaultVolumeName,
-            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            signingIdentity: SigningIdentity(
+                hash: "ABC",
+                name: "Developer ID Application: Example"
+            ),
             notaryProfile: "DeveloperID",
             replaceExistingOutput: false
         )
@@ -586,20 +766,32 @@ final class DMGBuildNotarizeTests: XCTestCase {
         } catch {
             XCTAssertEqual(
                 error.localizedDescription,
-                String(localized: "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again.")
+                String(
+                    localized:
+                        "DMGBuildNotarize needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable DMGBuildNotarize in System Settings › Privacy & Security › Automation, then try again."
+                )
             )
         }
     }
 
-    func testDmgContextUsesTemporaryCompressedOutputBeforeFinalPublish() throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+    func testDmgContextUsesTemporaryCompressedOutputBeforeFinalPublish() throws
+    {
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
-        let finalOutputURL = temporaryDirectory().appendingPathComponent("Fixture Final.dmg")
+        let finalOutputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture Final.dmg"
+        )
         let job = PackagingJob(
             appInfo: info,
             outputURL: finalOutputURL,
             volumeName: info.defaultVolumeName,
-            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            signingIdentity: SigningIdentity(
+                hash: "ABC",
+                name: "Developer ID Application: Example"
+            ),
             notaryProfile: "DeveloperID",
             replaceExistingOutput: false
         )
@@ -608,91 +800,192 @@ final class DMGBuildNotarizeTests: XCTestCase {
         let context = try builder.createContext(for: job)
 
         XCTAssertEqual(context.finalOutputURL, finalOutputURL)
-        XCTAssertEqual(context.compressedImageURL.lastPathComponent, finalOutputURL.lastPathComponent)
-        XCTAssertTrue(context.compressedImageURL.path.hasPrefix(context.workDirectory.path))
+        XCTAssertEqual(
+            context.compressedImageURL.lastPathComponent,
+            finalOutputURL.lastPathComponent
+        )
+        XCTAssertTrue(
+            context.compressedImageURL.path.hasPrefix(
+                context.workDirectory.path
+            )
+        )
         XCTAssertNotEqual(context.compressedImageURL, finalOutputURL)
         try? builder.clean(context: context)
     }
 
-    func testPrepareOutputAllowsReplacementWithoutRemovingExistingOutput() throws {
+    func testPrepareOutputAllowsReplacementWithoutRemovingExistingOutput()
+        throws
+    {
         let builder = DmgBuilder(runner: MockProcessRunner())
-        let outputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
-        try FileManager.default.createDirectory(at: outputURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let outputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
+        try FileManager.default.createDirectory(
+            at: outputURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
         try "existing".write(to: outputURL, atomically: true, encoding: .utf8)
 
         try builder.prepareOutput(outputURL, replaceExisting: true)
 
-        XCTAssertEqual(try String(contentsOf: outputURL, encoding: .utf8), "existing")
+        XCTAssertEqual(
+            try String(contentsOf: outputURL, encoding: .utf8),
+            "existing"
+        )
     }
 
     func testPublishOutputMovesTemporaryDmgToFinalOutput() throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
-        let finalOutputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        let finalOutputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
         let job = PackagingJob(
             appInfo: info,
             outputURL: finalOutputURL,
             volumeName: info.defaultVolumeName,
-            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            signingIdentity: SigningIdentity(
+                hash: "ABC",
+                name: "Developer ID Application: Example"
+            ),
             notaryProfile: "DeveloperID",
             replaceExistingOutput: false
         )
         let builder = DmgBuilder(runner: MockProcessRunner())
         let context = try builder.createContext(for: job)
-        try FileManager.default.createDirectory(at: context.compressedImageURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try FileManager.default.createDirectory(at: finalOutputURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try "temporary dmg".write(to: context.compressedImageURL, atomically: true, encoding: .utf8)
+        try FileManager.default.createDirectory(
+            at: context.compressedImageURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try FileManager.default.createDirectory(
+            at: finalOutputURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try "temporary dmg".write(
+            to: context.compressedImageURL,
+            atomically: true,
+            encoding: .utf8
+        )
 
         try builder.publishOutput(context: context, replaceExisting: false)
 
-        XCTAssertFalse(FileManager.default.fileExists(atPath: context.compressedImageURL.path))
-        XCTAssertEqual(try String(contentsOf: finalOutputURL, encoding: .utf8), "temporary dmg")
+        XCTAssertFalse(
+            FileManager.default.fileExists(
+                atPath: context.compressedImageURL.path
+            )
+        )
+        XCTAssertEqual(
+            try String(contentsOf: finalOutputURL, encoding: .utf8),
+            "temporary dmg"
+        )
         try? builder.clean(context: context)
     }
 
     func testPublishOutputReplacesExistingFinalOutputAtTheEnd() throws {
-        let appURL = try makeFixtureApp(displayName: "Fixture App", version: "1.2.3")
+        let appURL = try makeFixtureApp(
+            displayName: "Fixture App",
+            version: "1.2.3"
+        )
         let info = try AppBundleInfo.load(from: appURL)
-        let finalOutputURL = temporaryDirectory().appendingPathComponent("Fixture.dmg")
+        let finalOutputURL = temporaryDirectory().appendingPathComponent(
+            "Fixture.dmg"
+        )
         let job = PackagingJob(
             appInfo: info,
             outputURL: finalOutputURL,
             volumeName: info.defaultVolumeName,
-            signingIdentity: SigningIdentity(hash: "ABC", name: "Developer ID Application: Example"),
+            signingIdentity: SigningIdentity(
+                hash: "ABC",
+                name: "Developer ID Application: Example"
+            ),
             notaryProfile: "DeveloperID",
             replaceExistingOutput: true
         )
         let builder = DmgBuilder(runner: MockProcessRunner())
         let context = try builder.createContext(for: job)
-        try FileManager.default.createDirectory(at: context.compressedImageURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try FileManager.default.createDirectory(at: finalOutputURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try "old dmg".write(to: finalOutputURL, atomically: true, encoding: .utf8)
-        try "new dmg".write(to: context.compressedImageURL, atomically: true, encoding: .utf8)
+        try FileManager.default.createDirectory(
+            at: context.compressedImageURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try FileManager.default.createDirectory(
+            at: finalOutputURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try "old dmg".write(
+            to: finalOutputURL,
+            atomically: true,
+            encoding: .utf8
+        )
+        try "new dmg".write(
+            to: context.compressedImageURL,
+            atomically: true,
+            encoding: .utf8
+        )
 
         try builder.publishOutput(context: context, replaceExisting: true)
 
-        XCTAssertFalse(FileManager.default.fileExists(atPath: context.compressedImageURL.path))
-        XCTAssertEqual(try String(contentsOf: finalOutputURL, encoding: .utf8), "new dmg")
+        XCTAssertFalse(
+            FileManager.default.fileExists(
+                atPath: context.compressedImageURL.path
+            )
+        )
+        XCTAssertEqual(
+            try String(contentsOf: finalOutputURL, encoding: .utf8),
+            "new dmg"
+        )
         try? builder.clean(context: context)
     }
 
     func testFinderLayoutPositionsWindowItems() {
-        let script = DmgBuilder(runner: MockProcessRunner(), scriptRunner: MockAppleScriptRunner())
-            .debugFinderLayoutScript(appName: "Fixture.app", mountPath: "/tmp/Mounted Fixture")
+        let script = DmgBuilder(
+            runner: MockProcessRunner(),
+            scriptRunner: MockAppleScriptRunner()
+        )
+        .debugFinderLayoutScript(
+            appName: "Fixture.app",
+            mountPath: "/tmp/Mounted Fixture"
+        )
 
-        XCTAssertTrue(script.contains("set backgroundImageFile to POSIX file \"/tmp/Mounted Fixture/.background/background.png\" as alias"))
+        XCTAssertTrue(
+            script.contains(
+                "set backgroundImageFile to POSIX file \"/tmp/Mounted Fixture/.background/background.png\" as alias"
+            )
+        )
         XCTAssertTrue(script.contains("set bounds to {100, 100, 640, 500}"))
-        XCTAssertTrue(script.contains("set background picture of iconViewOptions to backgroundImageFile"))
-        XCTAssertTrue(script.contains("set icon size of iconViewOptions to 144"))
-        XCTAssertTrue(script.contains("set appItem to item \"Fixture.app\" of diskWindow"))
-        XCTAssertTrue(script.contains("set applicationsItem to item \"Applications\" of diskWindow"))
+        XCTAssertTrue(
+            script.contains(
+                "set background picture of iconViewOptions to backgroundImageFile"
+            )
+        )
+        XCTAssertTrue(
+            script.contains("set icon size of iconViewOptions to 144")
+        )
+        XCTAssertTrue(
+            script.contains("set appItem to item \"Fixture.app\" of diskWindow")
+        )
+        XCTAssertTrue(
+            script.contains(
+                "set applicationsItem to item \"Applications\" of diskWindow"
+            )
+        )
         XCTAssertTrue(script.contains("set position of appItem to {140, 175}"))
-        XCTAssertTrue(script.contains("set position of applicationsItem to {380, 175}"))
+        XCTAssertTrue(
+            script.contains("set position of applicationsItem to {380, 175}")
+        )
         XCTAssertTrue(script.contains("set text size of iconViewOptions to 12"))
-        XCTAssertTrue(script.contains("set label position of iconViewOptions to bottom"))
+        XCTAssertTrue(
+            script.contains("set label position of iconViewOptions to bottom")
+        )
         XCTAssertTrue(script.contains("open diskFolder"))
         XCTAssertTrue(script.contains("delay 2"))
-        XCTAssertFalse(script.contains("set position of item \"Applications\" of diskFolder"))
+        XCTAssertFalse(
+            script.contains(
+                "set position of item \"Applications\" of diskFolder"
+            )
+        )
     }
 
     func testProgressLogViewRenderStateShowsSuccessInlineWithoutPlaceholder() {
@@ -700,7 +993,10 @@ final class DMGBuildNotarizeTests: XCTestCase {
             logText: "",
             errorMessage: nil,
             credentialSetupProfileName: nil,
-            result: PackagingResult(outputURL: URL(fileURLWithPath: "/tmp/Fixture App.dmg"), notarizationID: "1234"),
+            result: PackagingResult(
+                outputURL: URL(fileURLWithPath: "/tmp/Fixture App.dmg"),
+                notarizationID: "1234"
+            ),
             onCreateCredentialProfile: {}
         )
 
@@ -715,12 +1011,26 @@ final class DMGBuildNotarizeTests: XCTestCase {
         )
     }
 
-    private func makeFixtureApp(displayName: String, version: String) throws -> URL {
+    private func makeFixtureApp(displayName: String, version: String) throws
+        -> URL
+    {
         let root = temporaryDirectory()
-        let appURL = root.appendingPathComponent("Fixture.app", isDirectory: true)
-        let contentsURL = appURL.appendingPathComponent("Contents", isDirectory: true)
-        let macOSURL = contentsURL.appendingPathComponent("MacOS", isDirectory: true)
-        try FileManager.default.createDirectory(at: macOSURL, withIntermediateDirectories: true)
+        let appURL = root.appendingPathComponent(
+            "Fixture.app",
+            isDirectory: true
+        )
+        let contentsURL = appURL.appendingPathComponent(
+            "Contents",
+            isDirectory: true
+        )
+        let macOSURL = contentsURL.appendingPathComponent(
+            "MacOS",
+            isDirectory: true
+        )
+        try FileManager.default.createDirectory(
+            at: macOSURL,
+            withIntermediateDirectories: true
+        )
 
         let plist: [String: String] = [
             "CFBundleName": "Fixture",
@@ -728,14 +1038,24 @@ final class DMGBuildNotarizeTests: XCTestCase {
             "CFBundleIdentifier": "com.example.fixture",
             "CFBundleExecutable": "Fixture",
             "CFBundleShortVersionString": version,
-            "CFBundleVersion": "42"
+            "CFBundleVersion": "42",
         ]
 
-        let plistData = try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
-        try plistData.write(to: contentsURL.appendingPathComponent("Info.plist"))
+        let plistData = try PropertyListSerialization.data(
+            fromPropertyList: plist,
+            format: .xml,
+            options: 0
+        )
+        try plistData.write(
+            to: contentsURL.appendingPathComponent("Info.plist")
+        )
 
         let executableURL = macOSURL.appendingPathComponent("Fixture")
-        try "#!/bin/sh\nexit 0\n".write(to: executableURL, atomically: true, encoding: .utf8)
+        try "#!/bin/sh\nexit 0\n".write(
+            to: executableURL,
+            atomically: true,
+            encoding: .utf8
+        )
         chmod(executableURL.path, 0o755)
 
         return appURL
@@ -753,8 +1073,14 @@ final class DMGBuildNotarizeTests: XCTestCase {
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
 
-        let settings = AppSettings(defaults: defaults, signingClient: SigningClient(runner: MockProcessRunner()))
-        let identity = SigningIdentity(hash: "ABCDEF1234567890", name: "Developer ID Application: Example Co (TEAMID1234)")
+        let settings = AppSettings(
+            defaults: defaults,
+            signingClient: SigningClient(runner: MockProcessRunner())
+        )
+        let identity = SigningIdentity(
+            hash: "ABCDEF1234567890",
+            name: "Developer ID Application: Example Co (TEAMID1234)"
+        )
         settings.signingIdentities = [identity]
         settings.signingIdentityHash = identity.hash
         settings.notaryProfile = "DeveloperID"
@@ -762,7 +1088,9 @@ final class DMGBuildNotarizeTests: XCTestCase {
     }
 }
 
-private final class MockAppleScriptRunner: AppleScriptRunning, @unchecked Sendable {
+private final class MockAppleScriptRunner: AppleScriptRunning,
+    @unchecked Sendable
+{
     private(set) var sources: [String] = []
     var error: Error?
     var sideEffect: ((String) throws -> Void)?
@@ -780,7 +1108,9 @@ private final class MockAppleScriptRunner: AppleScriptRunning, @unchecked Sendab
     }
 }
 
-private final class MockFinderAutomationAuthorizer: FinderAutomationAuthorizing, @unchecked Sendable {
+private final class MockFinderAutomationAuthorizer: FinderAutomationAuthorizing,
+    @unchecked Sendable
+{
     private(set) var requestCount = 0
     var error: Error?
 
@@ -823,13 +1153,20 @@ private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
     var results: [ProcessResult]
     var error: Error?
 
-    init(result: ProcessResult? = nil, results: [ProcessResult] = [], error: Error? = nil) {
+    init(
+        result: ProcessResult? = nil,
+        results: [ProcessResult] = [],
+        error: Error? = nil
+    ) {
         self.result = result
         self.results = results
         self.error = error
     }
 
-    func run(_ command: ProcessCommand, onOutput: @escaping @Sendable (String) -> Void) async throws -> ProcessResult {
+    func run(
+        _ command: ProcessCommand,
+        onOutput: @escaping @Sendable (String) -> Void
+    ) async throws -> ProcessResult {
         commands.append(command)
 
         if let error {
@@ -840,6 +1177,12 @@ private final class MockProcessRunner: ProcessRunning, @unchecked Sendable {
             return results.removeFirst()
         }
 
-        return result ?? ProcessResult(command: command, terminationStatus: 0, standardOutput: "", standardError: "")
+        return result
+            ?? ProcessResult(
+                command: command,
+                terminationStatus: 0,
+                standardOutput: "",
+                standardError: ""
+            )
     }
 }

@@ -36,28 +36,49 @@ struct AppBundleInfo: Identifiable, Equatable {
         }
 
         let data = try Data(contentsOf: plistURL)
-        guard let plist = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any] else {
+        guard
+            let plist = try PropertyListSerialization.propertyList(
+                from: data,
+                options: [],
+                format: nil
+            ) as? [String: Any]
+        else {
             throw AppBundleInfoError.invalidInfoPlist
         }
 
-        let bundleName = nonEmptyString(plist["CFBundleName"]) ?? appURL.deletingPathExtension().lastPathComponent
-        let displayName = nonEmptyString(plist["CFBundleDisplayName"]) ?? bundleName
+        let bundleName =
+            nonEmptyString(plist["CFBundleName"])
+            ?? appURL.deletingPathExtension().lastPathComponent
+        let displayName =
+            nonEmptyString(plist["CFBundleDisplayName"]) ?? bundleName
 
-        guard let bundleIdentifier = nonEmptyString(plist["CFBundleIdentifier"]) else {
+        guard let bundleIdentifier = nonEmptyString(plist["CFBundleIdentifier"])
+        else {
             throw AppBundleInfoError.missingRequiredKey("CFBundleIdentifier")
         }
 
-        guard let executableName = nonEmptyString(plist["CFBundleExecutable"]) else {
+        guard let executableName = nonEmptyString(plist["CFBundleExecutable"])
+        else {
             throw AppBundleInfoError.missingRequiredKey("CFBundleExecutable")
         }
 
-        guard let shortVersion = nonEmptyString(plist["CFBundleShortVersionString"]) else {
-            throw AppBundleInfoError.missingRequiredKey("CFBundleShortVersionString")
+        guard
+            let shortVersion = nonEmptyString(
+                plist["CFBundleShortVersionString"]
+            )
+        else {
+            throw AppBundleInfoError.missingRequiredKey(
+                "CFBundleShortVersionString"
+            )
         }
 
-        let buildVersion = nonEmptyString(plist["CFBundleVersion"]) ?? shortVersion
-        let executableURL = appURL.appendingPathComponent("Contents/MacOS/\(executableName)")
-        guard FileManager.default.isExecutableFile(atPath: executableURL.path) else {
+        let buildVersion =
+            nonEmptyString(plist["CFBundleVersion"]) ?? shortVersion
+        let executableURL = appURL.appendingPathComponent(
+            "Contents/MacOS/\(executableName)"
+        )
+        guard FileManager.default.isExecutableFile(atPath: executableURL.path)
+        else {
             throw AppBundleInfoError.missingExecutable(executableName)
         }
 
@@ -97,7 +118,8 @@ enum AppBundleInfoError: LocalizedError, Equatable {
         case .missingRequiredKey(let key):
             return "The app bundle Info.plist is missing \(key)."
         case .missingExecutable(let executable):
-            return "The app bundle executable \(executable) is missing or is not executable."
+            return
+                "The app bundle executable \(executable) is missing or is not executable."
         }
     }
 }

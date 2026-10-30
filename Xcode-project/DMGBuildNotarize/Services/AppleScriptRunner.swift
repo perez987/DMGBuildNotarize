@@ -28,7 +28,8 @@ struct DefaultAppleScriptRunner: AppleScriptRunning {
     )
 
     func execute(_ source: String) async throws {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+        try await withCheckedThrowingContinuation {
+            (continuation: CheckedContinuation<Void, Error>) in
             Self.queue.async {
                 do {
                     try Self.executeSynchronously(source)
@@ -58,9 +59,12 @@ struct DefaultAppleScriptRunner: AppleScriptRunning {
         // against nil can never detect the error. Detect error via the error
         // dictionary instead.
         if let errorInfo {
-            let message = errorInfo[NSAppleScript.errorMessage] as? String
+            let message =
+                errorInfo[NSAppleScript.errorMessage] as? String
                 ?? "Unknown AppleScript error"
-            let code = (errorInfo[NSAppleScript.errorNumber] as? NSNumber)?.intValue ?? -1
+            let code =
+                (errorInfo[NSAppleScript.errorNumber] as? NSNumber)?.intValue
+                ?? -1
             throw NSError(
                 domain: "NSAppleScript",
                 code: code,
