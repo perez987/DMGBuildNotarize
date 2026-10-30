@@ -2,6 +2,7 @@ import XCTest
 
 @testable import DMGBuildNotarize
 
+@MainActor
 final class DMGBuildNotarizeTests: XCTestCase {
     func testAppDeclaresAppleEventsUsageDescription() {
         XCTAssertEqual(
